@@ -1,0 +1,68 @@
+{
+  "name": "pastel-vue",
+  "version": "0.1.0",
+  "description": "A pastel-toned Vue 3 component library for building calm, modern interfaces and AI-focused tooling.",
+  "type": "module",
+  "license": "MIT",
+  "author": "nvms",
+  "homepage": "https://nvms.github.io/pastel-vue/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nvms/pastel-vue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nvms/pastel-vue/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "components",
+    "component-library",
+    "ui",
+    "design-system",
+    "pastel"
+  ],
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./style.css": "./src/style.css"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": [
+    "*.css",
+    "*.vue"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "histoire dev",
+    "build": "histoire build",
+    "preview": "histoire preview",
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "story:preview": "histoire preview"
+  },
+  "peerDependencies": {
+    "vue": "^3.4"
+  },
+  "dependencies": {
+    "@floating-ui/vue": "^1.1.6",
+    "@iconify/vue": "^5.0.1",
+    "@internationalized/date": "^3.12.1",
+    "diff": "^9.0.0",
+    "gpt-tokenizer": "^3.4.0",
+    "prismjs": "^1.30.0",
+    "reka-ui": "^2.9.7"
+  },
+  "devDependencies": {
+    "@histoire/plugin-vue": "^0.17.17",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "histoire": "^0.17.17",
+    "vite": "^5.4.0",
+    "vue": "^3.5.13"
+  }
+}
