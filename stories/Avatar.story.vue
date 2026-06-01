@@ -65,7 +65,7 @@ const clicks = ref(0)
       <div style="display: flex; align-items: center; gap: 10px; max-width: 320px;">
         <Avatar name="Theodora Whitfield" size="md" />
         <div style="display: flex; flex-direction: column; gap: 2px;">
-          <div style="font-size: 14px; letter-spacing: -0.14px;">Theodora Whitfield, Esq.</div>
+          <div style="font-size: 14px; letter-spacing: -0.14px;">Theodora Whitfield</div>
           <div class="pc-mono" style="color: var(--ink-60); font-size: 10px; letter-spacing: 0.06em;">Signed v2.1 · 2026-04-22</div>
         </div>
       </div>

@@ -3,28 +3,28 @@ import { ref } from "vue"
 import Combobox from "../src/components/Combobox.vue"
 import Field from "../src/components/Field.vue"
 
-const jurisdiction = ref("denver")
-const judge = ref(null)
-const county = ref("denver")
+const venue = ref("cherry-creek")
+const chef = ref(null)
+const venueB = ref("cherry-creek")
 
-const jurisdictionOptions = [
-  { value: "denver", label: "Denver County" },
-  { value: "arapahoe", label: "Arapahoe County" },
-  { value: "jefferson", label: "Jefferson County" },
-  { value: "boulder", label: "Boulder County" },
-  { value: "adams", label: "Adams County" },
-  { value: "douglas", label: "Douglas County" },
-  { value: "el-paso", label: "El Paso County" },
-  { value: "weld", label: "Weld County" },
-  { value: "larimer", label: "Larimer County" },
-  { value: "mesa", label: "Mesa County" },
+const venueOptions = [
+  { value: "cherry-creek", label: "Cherry Creek" },
+  { value: "union-station", label: "Union Station" },
+  { value: "highlands", label: "Highlands" },
+  { value: "pearl-district", label: "Pearl District" },
+  { value: "rino", label: "RiNo" },
+  { value: "lodo", label: "LoDo" },
+  { value: "wash-park", label: "Wash Park" },
+  { value: "capitol-hill", label: "Capitol Hill" },
+  { value: "berkeley", label: "Berkeley" },
+  { value: "sloans-lake", label: "Sloan's Lake" },
 ]
 
-const judges = [
-  { value: "j1", label: "Hon. Theodora Whitfield", court: "Denver County" },
-  { value: "j2", label: "Hon. Marcus Reyes", court: "Arapahoe County" },
-  { value: "j3", label: "Hon. Ife Adebayo", court: "Jefferson County" },
-  { value: "j4", label: "Hon. Daniela Park", court: "Boulder County" },
+const chefs = [
+  { value: "c1", label: "Theodora Whitfield", station: "Cherry Creek" },
+  { value: "c2", label: "Marcus Reyes", station: "Union Station" },
+  { value: "c3", label: "Ife Adebayo", station: "Highlands" },
+  { value: "c4", label: "Daniela Park", station: "Pearl District" },
 ]
 </script>
 
@@ -32,20 +32,20 @@ const judges = [
   <Story title="Combobox">
     <Variant title="Searchable (default)">
       <div style="max-width: 320px;">
-        <Field label="Jurisdiction">
-          <Combobox v-model="jurisdiction" :options="jurisdictionOptions" placeholder="Search counties..." />
+        <Field label="Venue">
+          <Combobox v-model="venue" :options="venueOptions" placeholder="Search venues..." />
         </Field>
       </div>
     </Variant>
 
     <Variant title="Single select (not searchable)">
       <div style="max-width: 320px;">
-        <Field label="County" hint="No typing - click to pick from the list">
+        <Field label="Venue" hint="No typing - click to pick from the list">
           <Combobox
-            v-model="county"
-            :options="jurisdictionOptions"
+            v-model="venueB"
+            :options="venueOptions"
             :searchable="false"
-            placeholder="Select a county"
+            placeholder="Select a venue"
           />
         </Field>
       </div>
@@ -53,12 +53,12 @@ const judges = [
 
     <Variant title="Custom item render">
       <div style="max-width: 360px;">
-        <Field label="Assigned judge">
-          <Combobox v-model="judge" :options="judges" placeholder="Search judges...">
+        <Field label="Assigned chef">
+          <Combobox v-model="chef" :options="chefs" placeholder="Search chefs...">
             <template #option="{ option }">
               <span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0;">
                 <span>{{ option.label }}</span>
-                <span class="pc-mono" style="color: var(--ink-60); font-size: 10px; letter-spacing: 0.06em;">{{ option.court }}</span>
+                <span class="pc-mono" style="color: var(--ink-60); font-size: 10px; letter-spacing: 0.06em;">{{ option.station }}</span>
               </span>
             </template>
           </Combobox>

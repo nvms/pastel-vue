@@ -5,32 +5,32 @@ import Card from "../src/components/Card.vue"
 
 const collapsible = ref(true)
 
-const answer = `The agreement runs for twenty-four months from the Effective Date [1], and either party may terminate it with sixty days written notice [2]. The notice period was originally thirty days but was extended by a later amendment [3].
+const answer = `The braise yields twelve portions and keeps for up to four days once properly cooled [1], and the ribs cook covered at 300°F until the meat pulls from the bone [2]. The braise time was originally two hours but was extended to three in a later revision [3].
 
-Late payments accrue interest at 1.5% per month [1], and confidentiality obligations survive termination for three years [4].`
+Season the ribs at about 1.5% salt by weight the night before [1], and let the finished braise rest overnight so the flavor deepens [4].`
 
 const sources = [
   {
-    title: "MSA - Acme Corp, §2 Term & Fees",
-    snippet: "This Agreement shall commence on the Effective Date and continue for twenty-four (24) months. Late payments accrue interest at 1.5% per month.",
+    title: "Braised Short Ribs - Yield & Seasoning",
+    snippet: "This recipe yields twelve (12) portions and keeps for up to four days once properly cooled. Season the ribs at about 1.5% salt by weight.",
     href: "#",
-    linkLabel: "msa-acme.pdf",
+    linkLabel: "short-ribs.pdf",
   },
   {
-    title: "MSA - Acme Corp, §9 Termination",
-    snippet: "Either party may terminate this Agreement with sixty (60) days written notice.",
+    title: "Braised Short Ribs - Braising",
+    snippet: "Braise the short ribs covered at 300°F until the meat pulls easily from the bone.",
     href: "#",
-    linkLabel: "msa-acme.pdf",
+    linkLabel: "short-ribs.pdf",
   },
   {
-    title: "Amendment No. 2",
-    snippet: "Section 9 is amended to extend the notice period from thirty days to sixty days.",
+    title: "Revision No. 2",
+    snippet: "Step 9 is revised to extend the braise time from two hours to three hours.",
     href: "#",
-    linkLabel: "Download amendment",
+    linkLabel: "Download revision",
   },
   {
-    title: "NDA - Globex, §5 Survival",
-    snippet: "Confidentiality obligations survive termination of this Agreement for a period of three years.",
+    title: "Resting & Storage - technique guide",
+    snippet: "Let the finished braise rest overnight; the flavor deepens after the first day.",
     href: "#",
   },
 ]

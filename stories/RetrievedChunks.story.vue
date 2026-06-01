@@ -4,28 +4,28 @@ import RetrievedChunks from "../src/components/RetrievedChunks.vue"
 
 const results = [
   {
-    source: "msa-acme.pdf",
+    source: "short-ribs.pdf",
     chunk: 12,
     score: 0.94,
-    text: "Either party may terminate this Agreement with sixty (60) days written notice. Upon termination, the Client shall pay for all services rendered through the termination date.",
+    text: "Braise the short ribs covered at 300°F until the meat pulls easily from the bone. Once cooled, portion the ribs and reserve the strained liquid for the sauce.",
   },
   {
-    source: "msa-acme.pdf",
+    source: "short-ribs.pdf",
     chunk: 7,
     score: 0.79,
-    text: "This Agreement shall commence on the Effective Date and continue for a period of twenty-four (24) months unless terminated earlier in accordance with Section 9.",
+    text: "This recipe yields twelve (12) portions and keeps for up to four days once properly cooled, unless adjusted per the latest revision.",
   },
   {
-    source: "amendment-2.pdf",
+    source: "revision-2.pdf",
     chunk: 3,
     score: 0.61,
-    text: "Section 9 is amended to extend the notice period from thirty days to sixty days, effective as of the date of this amendment.",
+    text: "Step 9 is revised to extend the braise time from two hours to three hours, effective as of this revision.",
   },
   {
-    source: "nda-globex.pdf",
+    source: "technique-guide.pdf",
     chunk: 19,
     score: 0.37,
-    text: "Confidentiality obligations survive termination of this Agreement for a period of three years.",
+    text: "Letting the finished braise rest overnight lets the flavor deepen and makes the surface fat easy to lift off the next day.",
   },
 ]
 

@@ -2,11 +2,11 @@
 import DistributionBar from "../src/components/DistributionBar.vue"
 import Card from "../src/components/Card.vue"
 
-const caseload = [
-  { label: "Intake", value: 34 },
-  { label: "In review", value: 52 },
-  { label: "Awaiting client", value: 28 },
-  { label: "Closed", value: 19 },
+const pipeline = [
+  { label: "Draft", value: 34 },
+  { label: "In testing", value: 52 },
+  { label: "Awaiting tasting", value: 28 },
+  { label: "On the menu", value: 19 },
 ]
 
 const storage = [
@@ -17,23 +17,23 @@ const storage = [
 ]
 
 const split = [
-  { label: "Billable", value: 68 },
-  { label: "Non-billable", value: 32 },
+  { label: "Prep", value: 68 },
+  { label: "Service", value: 32 },
 ]
 
 const practice = [
-  { label: "Litigation", value: 42, note: "18 active matters, 3 in trial prep" },
-  { label: "Corporate", value: 31, note: "12 active matters" },
-  { label: "Real estate", value: 18, note: "7 active matters" },
-  { label: "Estate", value: 9, note: "4 active matters" },
+  { label: "Mains", value: 42, note: "18 dishes on the menu, 3 in development" },
+  { label: "Starters", value: 31, note: "12 dishes on the menu" },
+  { label: "Desserts", value: 18, note: "7 dishes on the menu" },
+  { label: "Drinks", value: 9, note: "4 dishes on the menu" },
 ]
 </script>
 
 <template>
   <Story title="DistributionBar">
-    <Variant title="Caseload">
+    <Variant title="Recipe pipeline">
       <Card padded style="max-width: 520px;">
-        <DistributionBar label="Matters by stage" :segments="caseload" />
+        <DistributionBar label="Recipes by stage" :segments="pipeline" />
       </Card>
     </Variant>
 
@@ -55,13 +55,13 @@ const practice = [
 
     <Variant title="Taller bar, no legend">
       <Card padded style="max-width: 520px;">
-        <DistributionBar :segments="caseload" :height="24" :show-legend="false" />
+        <DistributionBar :segments="pipeline" :height="24" :show-legend="false" />
       </Card>
     </Variant>
 
     <Variant title="With tooltips">
       <Card padded style="max-width: 520px;">
-        <DistributionBar label="Matters by stage" :segments="caseload" tooltip />
+        <DistributionBar label="Recipes by stage" :segments="pipeline" tooltip />
       </Card>
       <p style="margin-top: 10px; font-size: 13px; color: var(--ink-60);">
         Hover any segment for its tooltip.
@@ -70,7 +70,7 @@ const practice = [
 
     <Variant title="Custom tooltip content">
       <Card padded style="max-width: 520px;">
-        <DistributionBar label="Practice mix" :segments="practice" tooltip>
+        <DistributionBar label="Menu mix" :segments="practice" tooltip>
           <template #tooltip="{ segment }">
             <span style="font-family: var(--display); font-size: 12px; font-weight: 500; letter-spacing: -0.12px;">
               {{ segment.label }} &middot; {{ segment.display }}

@@ -7,9 +7,9 @@ const build = () => {
   let s = 98765
   const rnd = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296 }
   const clusters = [
-    { name: "Contracts", cx: 0.26, cy: 0.68 },
-    { name: "Court filings", cx: 0.72, cy: 0.62 },
-    { name: "Correspondence", cx: 0.5, cy: 0.24 },
+    { name: "Recipes", cx: 0.26, cy: 0.68 },
+    { name: "Prep cards", cx: 0.72, cy: 0.62 },
+    { name: "Food-safety standards", cx: 0.5, cy: 0.24 },
   ]
   const pts = []
   clusters.forEach((c) => {
@@ -26,7 +26,7 @@ const build = () => {
 }
 
 const points = build()
-const query = { x: 0.44, y: 0.58, label: "Query: termination terms" }
+const query = { x: 0.44, y: 0.58, label: "Query: braising steps" }
 const neighbors = points
   .map((p, i) => ({ i, d: (p.x - query.x) ** 2 + (p.y - query.y) ** 2 }))
   .sort((a, b) => a.d - b.d)

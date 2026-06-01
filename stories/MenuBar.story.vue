@@ -20,8 +20,8 @@ const menus = [
         icon: "lucide:file-plus-2",
         items: [
           { label: "Empty Document", value: "tpl-empty" },
-          { label: "Case Brief", value: "tpl-brief", icon: "lucide:scale" },
-          { label: "Memo", value: "tpl-memo", icon: "lucide:notebook-pen" },
+          { label: "Recipe Card", value: "tpl-brief", icon: "lucide:chef-hat" },
+          { label: "Prep List", value: "tpl-memo", icon: "lucide:notebook-pen" },
           { divider: true },
           { label: "Browse all…", value: "tpl-browse" },
         ],
@@ -30,9 +30,9 @@ const menus = [
       {
         label: "Open Recent",
         items: [
-          { label: "case-2026-evn-2401", value: "recent-1" },
-          { label: "case-2026-evn-2398", value: "recent-2" },
-          { label: "case-2026-evn-2390", value: "recent-3" },
+          { label: "recipe-2026-rcp-2401", value: "recent-1" },
+          { label: "recipe-2026-rcp-2398", value: "recent-2" },
+          { label: "recipe-2026-rcp-2390", value: "recent-3" },
           { divider: true },
           { label: "Clear Menu", value: "recent-clear", danger: true },
         ],
@@ -84,7 +84,7 @@ const menus = [
     label: "Go",
     items: [
       { label: "Dashboard", value: "dashboard", icon: "lucide:layout-dashboard", shortcut: ["⌘", "1"] },
-      { label: "Cases", value: "cases", icon: "lucide:folder", shortcut: ["⌘", "2"] },
+      { label: "Recipes", value: "recipes", icon: "lucide:folder", shortcut: ["⌘", "2"] },
       { label: "Evals", value: "evals", icon: "lucide:beaker", shortcut: ["⌘", "3"] },
       { divider: true },
       { label: "Command Palette…", value: "palette", icon: "lucide:command", shortcut: ["⌘", "K"] },
@@ -198,7 +198,7 @@ const compactMenus = [
       <div style="border: 1px solid var(--ink-08); border-radius: 8px; overflow: hidden;">
         <MenuBar :menus="compactMenus" size="sm" bordered @select="onSelect">
           <template #leading>
-            <strong style="font-size: 13px; padding: 0 4px;">case-2026-evn-2401</strong>
+            <strong style="font-size: 13px; padding: 0 4px;">recipe-2026-rcp-2401</strong>
           </template>
           <template #trailing>
             <Badge variant="active">live</Badge>

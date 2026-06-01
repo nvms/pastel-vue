@@ -3,8 +3,8 @@ import { ref } from "vue"
 import Tree from "../src/components/Tree.vue"
 import Card from "../src/components/Card.vue"
 
-const expanded = ref(["sources", "statutes"])
-const selected = ref("crs-13-40-104")
+const expanded = ref(["sources", "standards"])
+const selected = ref("fc-3-401-11")
 
 const items = [
   {
@@ -13,32 +13,32 @@ const items = [
     icon: "▣",
     children: [
       {
-        key: "statutes",
-        label: "Colorado statutes",
+        key: "standards",
+        label: "Food-safety standards",
         icon: "§",
         badge: 14,
         children: [
-          { key: "crs-13-40-104", label: "C.R.S. 13-40-104 - Grounds" },
-          { key: "crs-13-40-107", label: "C.R.S. 13-40-107 - Notice to quit" },
-          { key: "crs-13-40-111", label: "C.R.S. 13-40-111 - Issuance of summons" },
+          { key: "fc-3-401-11", label: "FDA Food Code § 3-401.11 - Cook temperatures" },
+          { key: "fc-3-501-14", label: "FDA Food Code § 3-501.14 - Cooling" },
+          { key: "fc-3-501-16", label: "FDA Food Code § 3-501.16 - Hot/cold holding" },
         ],
       },
       {
         key: "rules",
-        label: "Court rules",
+        label: "House rules",
         icon: "§",
         children: [
-          { key: "ccp-3", label: "C.R.C.P. Rule 3" },
-          { key: "ccp-12", label: "C.R.C.P. Rule 12" },
+          { key: "hr-3", label: "ServSafe Manager Manual Ch. 3" },
+          { key: "hr-12", label: "ServSafe Manager Manual Ch. 12" },
         ],
       },
       {
         key: "forms",
-        label: "Court forms",
+        label: "Prep sheets",
         icon: "▢",
         children: [
-          { key: "jdf-101", label: "JDF 101 - Complaint" },
-          { key: "jdf-104", label: "JDF 104 - Summons", disabled: true },
+          { key: "ps-101", label: "PS 101 - Mise en place" },
+          { key: "ps-104", label: "PS 104 - Line check", disabled: true },
         ],
       },
     ],
@@ -48,8 +48,8 @@ const items = [
     label: "Workflows",
     icon: "⇄",
     children: [
-      { key: "wf-intake", label: "Intake → File" },
-      { key: "wf-hearing", label: "Hearing prep" },
+      { key: "wf-intake", label: "Intake → Test" },
+      { key: "wf-service", label: "Service prep" },
     ],
   },
   { key: "models", label: "Models", icon: "◇" },
@@ -73,11 +73,11 @@ const items = [
         <Tree
           :items="[
             { key: 'a', label: 'Documents', children: [
-              { key: 'a1', label: 'Filings', children: [
-                { key: 'a1a', label: 'Complaint.pdf' },
-                { key: 'a1b', label: 'Summons.pdf' },
+              { key: 'a1', label: 'Recipes', children: [
+                { key: 'a1a', label: 'Braised-short-rib.pdf' },
+                { key: 'a1b', label: 'Cost-sheet.pdf' },
               ]},
-              { key: 'a2', label: 'Evidence' },
+              { key: 'a2', label: 'Photos' },
             ]},
             { key: 'b', label: 'Correspondence' },
           ]"

@@ -28,9 +28,9 @@ const bgWash = {
 }
 
 const bgCards = [
-  { label: "Total matters", value: "1,284", data: climbing, variant: "default" },
+  { label: "Total recipes", value: "1,284", data: climbing, variant: "default" },
   { label: "Active reviewers", value: "17", data: calm, variant: "lavender" },
-  { label: "Matters opened", value: "248", data: climbing, variant: "success" },
+  { label: "Recipes added", value: "248", data: climbing, variant: "success" },
   { label: "Pending review", value: "32", data: choppy, variant: "warning" },
   { label: "Avg. cycle time", value: "6.2d", data: dipping, variant: "danger" },
 ]
@@ -67,7 +67,7 @@ const bgCards = [
       <div style="display: flex; gap: 16px; flex-wrap: wrap;">
         <Card padded style="width: 220px;">
           <div style="font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; color: var(--ink-60);">
-            Matters opened
+            Recipes added
           </div>
           <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: 10px;">
             <div style="font-family: var(--display); font-size: 34px; font-weight: 500; letter-spacing: -0.7px;">248</div>

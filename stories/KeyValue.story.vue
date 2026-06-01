@@ -4,10 +4,10 @@ import Card from "../src/components/Card.vue"
 import Badge from "../src/components/Badge.vue"
 
 const items = [
-  { label: "Case ID", value: "2026-EVN-2401" },
-  { label: "Tenant", value: "Aiyana Khan" },
-  { label: "Jurisdiction", value: "Denver County, CO" },
-  { label: "Filed", value: "May 14, 2026" },
+  { label: "Recipe ID", value: "2026-RCP-2401" },
+  { label: "Owner", value: "Aiyana Khan" },
+  { label: "Venue", value: "West Kitchen, Denver" },
+  { label: "Approved", value: "May 14, 2026" },
   { label: "Status", value: "active" },
   { label: "Confidence", value: "0.92" },
 ]

@@ -40,7 +40,7 @@ import Button from "../src/components/Button.vue"
       <PageHeader
         eyebrow="Dashboard"
         title="Overview"
-        subtitle="A snapshot of the last 24 hours across all jurisdictions."
+        subtitle="A snapshot of the last 24 hours across all venues."
       >
         <template #actions>
           <Button variant="outline" size="sm">Export</Button>

@@ -6,11 +6,11 @@ import Badge from "../src/components/Badge.vue"
 
 const opened = ref(null)
 
-const caseEvents = [
+const recipeEvents = [
   {
-    title: "Matter opened",
+    title: "Recipe drafted",
     time: "Mar 4",
-    description: "Intake form submitted by R. Alvarez and assigned to the contracts team.",
+    description: "Draft submitted by R. Alvarez and assigned to the development kitchen.",
     status: "done",
     icon: "lucide:folder-plus",
   },
@@ -22,23 +22,23 @@ const caseEvents = [
     icon: "lucide:file-check-2",
   },
   {
-    title: "Conflict check cleared",
+    title: "Allergen check cleared",
     time: "Mar 7",
-    description: "No conflicts found across the active client roster.",
+    description: "No allergen conflicts found across the current menu.",
     status: "done",
     icon: "lucide:shield-check",
   },
   {
     title: "Under review",
     time: "Mar 11",
-    description: "Lead associate is drafting the first-pass redline.",
+    description: "Sous chef is testing the first-pass recipe.",
     status: "active",
     icon: "lucide:pen-line",
   },
   {
-    title: "Client approval",
+    title: "Chef approval",
     time: "Pending",
-    description: "Awaiting sign-off before the matter can be closed.",
+    description: "Awaiting sign-off before the recipe goes on the menu.",
     status: "default",
     icon: "lucide:circle-dashed",
   },
@@ -46,9 +46,9 @@ const caseEvents = [
 
 const clickableEvents = [
   {
-    title: "Matter opened",
+    title: "Recipe drafted",
     time: "Mar 4",
-    description: "Intake submitted by R. Alvarez. Click to open the intake record.",
+    description: "Draft submitted by R. Alvarez. Click to open the draft record.",
     status: "done",
     icon: "lucide:folder-plus",
     clickable: true,
@@ -62,9 +62,9 @@ const clickableEvents = [
     clickable: true,
   },
   {
-    title: "Conflict check cleared",
+    title: "Allergen check cleared",
     time: "Mar 7",
-    description: "No conflicts found. Click for the full conflict report.",
+    description: "No allergen conflicts found. Click for the full allergen report.",
     status: "done",
     icon: "lucide:shield-check",
     clickable: true,
@@ -72,13 +72,13 @@ const clickableEvents = [
   {
     title: "Under review",
     time: "Mar 11",
-    description: "Lead associate is drafting the first-pass redline.",
+    description: "Sous chef is testing the first-pass recipe.",
     status: "active",
     icon: "lucide:pen-line",
     clickable: true,
   },
   {
-    title: "Awaiting client approval",
+    title: "Awaiting chef approval",
     time: "Pending",
     description: "Not actionable yet, so this row is not clickable.",
     status: "default",
@@ -98,9 +98,9 @@ const plainEvents = [
 
 <template>
   <Story title="Timeline">
-    <Variant title="Case history">
+    <Variant title="Recipe history">
       <Card padded style="max-width: 460px;">
-        <Timeline :items="caseEvents" />
+        <Timeline :items="recipeEvents" />
       </Card>
     </Variant>
 
@@ -121,7 +121,7 @@ const plainEvents = [
 
     <Variant title="Custom content slot">
       <div style="max-width: 440px;">
-        <Timeline :items="caseEvents.slice(0, 3)">
+        <Timeline :items="recipeEvents.slice(0, 3)">
           <template #title="{ item }">
             <span style="display: inline-flex; align-items: center; gap: 8px;">
               {{ item.title }}

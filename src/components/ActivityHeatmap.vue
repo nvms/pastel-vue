@@ -17,7 +17,7 @@ const props = defineProps({
   showLegend: { type: Boolean, default: true },
   // show a tooltip on hover for cells that carry data
   tooltip: { type: Boolean, default: false },
-  // optional unit appended to the value in the tooltip, e.g. "filings"
+  // optional unit appended to the value in the tooltip, e.g. "preps"
   unit: { type: String, default: "" },
 })
 

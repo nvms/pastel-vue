@@ -26,19 +26,19 @@ const statusOptions = [
 ]
 
 const columns = [
-  { key: "case", label: "Case" },
-  { key: "tenant", label: "Tenant" },
-  { key: "jurisdiction", label: "Jurisdiction" },
+  { key: "recipe", label: "Recipe" },
+  { key: "owner", label: "Owner" },
+  { key: "venue", label: "Venue" },
   { key: "status", label: "Status" },
-  { key: "filed", label: "Filed", align: "right" },
+  { key: "updated", label: "Updated", align: "right" },
 ]
 const rows = Array.from({ length: 8 }, (_, i) => ({
   id: i,
-  case: `2026-EVN-${String(2400 + i).padStart(4, "0")}`,
-  tenant: ["A. Khan", "M. Reyes", "R. Watanabe", "J. Park"][i % 4],
-  jurisdiction: ["Denver County", "Arapahoe County", "Boulder County", "Jefferson County"][i % 4],
+  recipe: `2026-RCP-${String(2400 + i).padStart(4, "0")}`,
+  owner: ["A. Khan", "M. Reyes", "R. Watanabe", "J. Park"][i % 4],
+  venue: ["Cherry Creek", "Union Station", "Highlands", "Pearl District"][i % 4],
   status: ["active", "paused", "active", "failed"][i % 4],
-  filed: `2026-05-${String(i + 1).padStart(2, "0")}`,
+  updated: `2026-05-${String(i + 1).padStart(2, "0")}`,
 }))
 </script>
 
@@ -48,7 +48,7 @@ const rows = Array.from({ length: 8 }, (_, i) => ({
       <div style="border: 1px solid var(--ink-08); border-radius: 8px; overflow: hidden;">
         <Toolbar bordered>
           <template #leading>
-            <SearchInput v-model="q" placeholder="Search cases" shortcut="⌘K" />
+            <SearchInput v-model="q" placeholder="Search recipes" shortcut="⌘K" />
           </template>
 
           <template #trailing>
@@ -62,7 +62,7 @@ const rows = Array.from({ length: 8 }, (_, i) => ({
               size="sm"
             />
             <Button variant="outline" size="sm">Export</Button>
-            <Button variant="primary" size="sm">New case</Button>
+            <Button variant="primary" size="sm">New recipe</Button>
           </template>
 
           <template #filters>
@@ -99,7 +99,7 @@ const rows = Array.from({ length: 8 }, (_, i) => ({
 
     <Variant title="Single row, sticky">
       <Toolbar bordered sticky>
-        <template #leading><strong style="font-size: 15px;">Cases</strong></template>
+        <template #leading><strong style="font-size: 15px;">Recipes</strong></template>
         <Badge variant="active">3 live</Badge>
         <template #trailing>
           <Button variant="outline" size="sm">Filters</Button>

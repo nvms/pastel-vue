@@ -47,7 +47,7 @@ onBeforeUnmount(() => clearInterval(timer))
           :value="184"
           :max="250"
           variant="success"
-          label="Matters"
+          label="Covers"
           :format-value="(v) => `${v}`"
         />
         <Gauge

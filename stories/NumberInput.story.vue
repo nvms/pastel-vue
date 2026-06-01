@@ -20,7 +20,7 @@ const large = ref(15)
     </Variant>
 
     <Variant title="Step + range">
-      <Field label="Arrears (cents)" hint="Steps by 100, clamped 0 - 100000">
+      <Field label="Plate cost (cents)" hint="Steps by 100, clamped 0 - 100000">
         <NumberInput v-model="price" :min="0" :max="100000" :step="100" />
       </Field>
     </Variant>

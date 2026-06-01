@@ -3,17 +3,15 @@ import { ref } from "vue"
 import DiffViewer from "../src/components/DiffViewer.vue"
 import ToggleGroup from "../src/components/ToggleGroup.vue"
 
-const clauseOld = `This Agreement shall commence on the Effective Date
-and continue for a period of twelve (12) months.
-Either party may terminate with thirty (30) days notice.
-Late payments accrue interest at 1.5% per month.
-Confidential information must not be disclosed.`
+const clauseOld = `This braised short rib recipe yields eight (8) portions
+and braises for about two (2) hours.
+Season the ribs with one percent salt by weight.
+Reserve the braising liquid for the sauce.`
 
-const clauseNew = `This Agreement shall commence on the Effective Date
-and continue for a period of twenty-four (24) months.
-Either party may terminate with sixty (60) days written notice.
-Late payments accrue interest at 1.5% per month.
-All confidential information must not be disclosed to third parties.`
+const clauseNew = `This braised short rib recipe yields twelve (12) portions
+and braises for about three (3) hours.
+Season the ribs with one and one-half percent salt by weight.
+Strain and reserve the braising liquid for the pan sauce.`
 
 const configOld = `server:
   host: localhost

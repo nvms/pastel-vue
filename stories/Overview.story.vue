@@ -11,16 +11,16 @@ import Kbd from "../src/components/Kbd.vue"
 import ArrowLink from "../src/components/ArrowLink.vue"
 
 const stats = [
-  { label: "Active cases", value: "16", caption: "across 5 properties" },
-  { label: "Needs review", value: "6", caption: "attorney or property manager action required" },
-  { label: "Outstanding rent", value: "$54,155", caption: "across 16 open cases" },
-  { label: "Eval confidence", value: "96%", caption: "workflow-wide pass rate · 42 cases" },
+  { label: "Active recipes", value: "16", caption: "across 5 venues" },
+  { label: "Needs review", value: "6", caption: "head chef sign-off required" },
+  { label: "Food cost (MTD)", value: "$54,155", caption: "across 16 active recipes" },
+  { label: "Eval confidence", value: "96%", caption: "menu-wide pass rate · 42 recipes" },
 ]
 
-const jurisdictions = [
-  { city: "Denver, CO", sub: "Denver County · rules v3", status: "active", signed: "Theodora Whitfield, Esq." },
-  { city: "Phoenix, AZ", sub: "Maricopa County · rules v7", status: "active", signed: "Marisol Reyna, Esq." },
-  { city: "Boulder, CO", sub: "Boulder County · rules v0-draft", status: "draft", signed: "unsigned" },
+const venues = [
+  { city: "Denver, CO", sub: "Union Station · recipes v3", status: "active", signed: "Theodora Whitfield" },
+  { city: "Phoenix, AZ", sub: "Camelback · recipes v7", status: "active", signed: "Marisol Reyna" },
+  { city: "Boulder, CO", sub: "Pearl District · recipes v0-draft", status: "draft", signed: "unsigned" },
 ]
 
 const models = [
@@ -40,14 +40,14 @@ const models = [
             <SectionLabel>Thursday, April 30</SectionLabel>
             <Display size="lg" style="margin-top: 12px;">Good morning, Maya.</Display>
             <p class="dash__hero-sub">
-              <a class="dash__link">4 cases are waiting on attorney sign-off</a>,
-              <a class="dash__link">1 property is blocked on a missing lease</a>,
-              and <a class="dash__link">3 cases have a court date</a> in the next two weeks.
+              <a class="dash__link">4 recipes are waiting on head chef sign-off</a>,
+              <a class="dash__link">1 menu is blocked on a missing cost sheet</a>,
+              and <a class="dash__link">3 dishes launch on the spring menu</a> in the next two weeks.
               The Denver evaluation finished overnight at <a class="dash__link">93% passing</a>.
             </p>
             <div class="dash__hero-actions">
               <Button variant="primary" size="lg">Open today's queue</Button>
-              <Button variant="outline" size="lg">Add a jurisdiction</Button>
+              <Button variant="outline" size="lg">Add a venue</Button>
             </div>
           </div>
         </PastelBg>
@@ -63,11 +63,11 @@ const models = [
         <section class="dash__grid">
           <Card padded>
             <div class="dash__card-head">
-              <SectionLabel>Jurisdictions</SectionLabel>
+              <SectionLabel>Venues</SectionLabel>
               <ArrowLink mono>All</ArrowLink>
             </div>
             <ul class="dash__jur-list">
-              <li v-for="j in jurisdictions" :key="j.city" class="dash__jur">
+              <li v-for="j in venues" :key="j.city" class="dash__jur">
                 <div class="dash__jur-name">{{ j.city }}</div>
                 <div class="dash__jur-badge">
                   <Badge :variant="j.status" dot>{{ j.status }}</Badge>
@@ -78,7 +78,7 @@ const models = [
               <li>
                 <button class="dash__add">
                   <span>+</span>
-                  <span>Add a new jurisdiction</span>
+                  <span>Add a new venue</span>
                 </button>
               </li>
             </ul>

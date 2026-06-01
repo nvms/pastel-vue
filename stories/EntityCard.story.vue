@@ -1,52 +1,52 @@
 <script setup>
 import EntityCard from "../src/components/EntityCard.vue"
 
-const jurisdictions = [
+const venues = [
   {
-    monogram: "CO", title: "Denver, CO", subtitle: "Denver County",
+    monogram: "CO", title: "Denver, CO", subtitle: "West Kitchen",
     status: "active", statusVariant: "active",
     metrics: [
-      { label: "Rules", value: 8 },
-      { label: "Active cases", value: 16 },
-      { label: "Workflow version", value: "v3", mono: true },
+      { label: "Standards", value: 8 },
+      { label: "On the menu", value: 16 },
+      { label: "Recipes version", value: "v3", mono: true },
     ],
-    footer: "Signed by Theodora Whitfield, Esq.",
+    footer: "Chef sign-off: Theodora Whitfield",
   },
   {
-    monogram: "AZ", title: "Phoenix, AZ", subtitle: "Maricopa County",
+    monogram: "AZ", title: "Phoenix, AZ", subtitle: "Desert Venue",
     status: "active", statusVariant: "active",
     metrics: [
-      { label: "Rules", value: 12 },
-      { label: "Active cases", value: 0 },
-      { label: "Workflow version", value: "v7", mono: true },
+      { label: "Standards", value: 12 },
+      { label: "On the menu", value: 0 },
+      { label: "Recipes version", value: "v7", mono: true },
     ],
-    footer: "Signed by Marisol Reyna, Esq.",
+    footer: "Chef sign-off: Marisol Reyna",
   },
   {
-    monogram: "TN", title: "Nashville, TN", subtitle: "Davidson County",
+    monogram: "TN", title: "Nashville, TN", subtitle: "Music Row",
     status: "draft", statusVariant: "draft",
     metrics: [
-      { label: "Rules", value: 3 },
-      { label: "Active cases", value: 0 },
-      { label: "Workflow version", value: "-", mono: true },
+      { label: "Standards", value: 3 },
+      { label: "On the menu", value: 0 },
+      { label: "Recipes version", value: "-", mono: true },
     ],
-    footer: "Not yet signed",
+    footer: "Not yet signed off",
   },
 ]
 </script>
 
 <template>
   <Story title="EntityCard">
-    <Variant title="Jurisdiction card (reproduction)">
+    <Variant title="Venue card (reproduction)">
       <div style="max-width: 360px;">
-        <EntityCard v-bind="jurisdictions[0]" interactive />
+        <EntityCard v-bind="venues[0]" interactive />
       </div>
     </Variant>
 
     <Variant title="Grid of cards">
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
         <EntityCard
-          v-for="j in jurisdictions"
+          v-for="j in venues"
           :key="j.title"
           v-bind="j"
           :gradient="j.status === 'active'"
@@ -60,32 +60,32 @@ const jurisdictions = [
         <EntityCard
           monogram="NY"
           title="New York, NY"
-          subtitle="New York County"
+          subtitle="Union Station"
           status="active"
           status-variant="active"
           monogram-bg="#010120"
           monogram-color="#ffffff"
           :metrics="[
-            { label: 'Rules', value: 32 },
-            { label: 'Active cases', value: 184 },
-            { label: 'Workflow version', value: 'v9', mono: true },
+            { label: 'Standards', value: 32 },
+            { label: 'On the menu', value: 184 },
+            { label: 'Recipes version', value: 'v9', mono: true },
           ]"
-          footer="Signed by Ezekiel Vanderhoof, Esq."
+          footer="Chef sign-off: Ezekiel Vanderhoof"
         />
         <EntityCard
           monogram="WA"
           title="Seattle, WA"
-          subtitle="King County"
+          subtitle="Pike Place"
           status="active"
           status-variant="active"
           monogram-bg="#ef2cc1"
           monogram-color="#ffffff"
           :metrics="[
-            { label: 'Rules', value: 14 },
-            { label: 'Active cases', value: 42 },
-            { label: 'Workflow version', value: 'v4', mono: true },
+            { label: 'Standards', value: 14 },
+            { label: 'On the menu', value: 42 },
+            { label: 'Recipes version', value: 'v4', mono: true },
           ]"
-          footer="Signed by Imani Hollingsworth, Esq."
+          footer="Chef sign-off: Imani Hollingsworth"
         />
       </div>
     </Variant>
@@ -95,13 +95,13 @@ const jurisdictions = [
         <EntityCard
           monogram="OR"
           title="Portland, OR"
-          subtitle="Multnomah County"
+          subtitle="Pearl District"
           status="active"
           status-variant="active"
           :metrics="[
-            { label: 'Rules', value: 21 },
-            { label: 'Active cases', value: 9 },
-            { label: 'Workflow version', value: 'v5', mono: true },
+            { label: 'Standards', value: 21 },
+            { label: 'On the menu', value: 9 },
+            { label: 'Recipes version', value: 'v5', mono: true },
           ]"
         >
           <template #footer>
@@ -121,18 +121,18 @@ const jurisdictions = [
           <EntityCard
             monogram="CO"
             title="Denver, CO"
-            subtitle="Denver County"
+            subtitle="West Kitchen"
             status="active"
             status-variant="active"
             :metrics="[
-              { label: 'Rules', value: 8 },
-              { label: 'Active cases this quarter', value: 16 },
-              { label: 'Workflow version', value: 'v3', mono: true },
-              { label: 'Forms', value: 12 },
-              { label: 'Average days to first filing', value: 21 },
+              { label: 'Standards', value: 8 },
+              { label: 'Dishes on the menu this quarter', value: 16 },
+              { label: 'Recipes version', value: 'v3', mono: true },
+              { label: 'Prep cards', value: 12 },
+              { label: 'Average days from draft to menu', value: 21 },
               { label: 'Eval pass', value: '96%' },
             ]"
-            footer="Signed by Theodora Whitfield, Esq."
+            footer="Chef sign-off: Theodora Whitfield"
           />
         </div>
 
@@ -141,17 +141,17 @@ const jurisdictions = [
           <EntityCard
             monogram="AZ"
             title="Phoenix, AZ"
-            subtitle="Maricopa County"
+            subtitle="Desert Venue"
             status="active"
             status-variant="active"
             :metric-columns="2"
             :metrics="[
-              { label: 'Rules', value: 12 },
-              { label: 'Active cases this quarter', value: 9 },
-              { label: 'Average days to first filing', value: 18 },
+              { label: 'Standards', value: 12 },
+              { label: 'Dishes on the menu this quarter', value: 9 },
+              { label: 'Average days from draft to menu', value: 18 },
               { label: 'Eval pass rate', value: '94%' },
             ]"
-            footer="Signed by Marisol Reyna, Esq."
+            footer="Chef sign-off: Marisol Reyna"
           />
         </div>
       </div>

@@ -2,11 +2,11 @@
 import ChunkedDocument from "../src/components/ChunkedDocument.vue"
 import Card from "../src/components/Card.vue"
 
-const docText = `This Master Services Agreement is entered into between the Provider and the Client as of the Effective Date. The Provider shall deliver the services described in Schedule A within thirty business days. Any delay beyond this period entitles the Client to a pro-rata refund of fees already paid.
+const docText = `This braised short rib recipe is built for a twelve-portion batch and comes together in a single heavy pot. Season the ribs at about one and one-half percent salt by weight the night before, then sear them on all sides over high heat until deeply browned, roughly ten minutes total.
 
-The Client agrees to provide all necessary materials, access, and approvals in a timely manner. Fees are invoiced monthly and are due within fifteen days of the invoice date. Late payments accrue interest at one and one-half percent per month until paid in full.
+Add the mirepoix and braising liquid, bring everything to a gentle simmer, then cover the pot and move it to a 300°F oven. Braise for about three hours, until the meat pulls easily from the bone, basting once or twice along the way.
 
-Confidential information disclosed by either party shall not be shared with third parties without prior written consent. This obligation survives termination of the Agreement for a period of three years.`
+Cool the braise properly before storing it. Once cooled it keeps for up to four days, and the flavor deepens after the first day; lift off the firm surface fat before reheating gently for service.`
 
 // sliding-window chunks with overlap
 const chunkText = (text, size, overlap) => {

@@ -18,15 +18,15 @@ const sections = [
       { key: "inbox", label: "Inbox", icon: "inbox", badge: 4 },
       { key: "overview", label: "Overview", icon: "overview" },
       { key: "intakes", label: "Intake runs", icon: "intakes" },
-      { key: "cases", label: "Cases", icon: "cases" },
+      { key: "recipes", label: "Recipes", icon: "recipes" },
     ],
   },
   {
     title: "Configure",
     items: [
-      { key: "jurisdictions", label: "Jurisdictions", icon: "jurisdictions" },
+      { key: "venues", label: "Venues", icon: "venues" },
       { key: "workflows", label: "Workflows", icon: "workflows" },
-      { key: "forms", label: "Forms", icon: "forms" },
+      { key: "forms", label: "Prep cards", icon: "forms" },
     ],
   },
   {
@@ -71,9 +71,9 @@ const sections = [
 
         <div style="padding: 0 32px 32px; display: flex; flex-direction: column; gap: 16px;">
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-            <Card padded><Stat label="Open cases" value="38" caption="across 4 jurisdictions" size="lg" /></Card>
+            <Card padded><Stat label="Active recipes" value="38" caption="across 4 venues" size="lg" /></Card>
             <Card padded><Stat label="Intake runs" value="124" caption="this week" size="lg" /></Card>
-            <Card padded><Stat label="Forms" value="9" caption="active templates" size="lg" /></Card>
+            <Card padded><Stat label="Prep cards" value="9" caption="active templates" size="lg" /></Card>
             <Card padded><Stat label="Eval pass" value="96%" caption="last 100 runs" size="lg" /></Card>
           </div>
           <Card padded>

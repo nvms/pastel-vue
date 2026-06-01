@@ -4,13 +4,13 @@ import Redactor from "../src/components/Redactor.vue"
 import Card from "../src/components/Card.vue"
 import Switch from "../src/components/Switch.vue"
 
-const docText = `AFFIDAVIT OF SERVICE
+const docText = `STAFF ONBOARDING RECORD
 
-I, Marcus Halloway, residing at 4417 Cedar Hollow Lane, declare under penalty of perjury that on March 12, 2026, I served the attached summons upon the respondent, Elena Voss, by personal delivery.
+Marcus Halloway joined the Cherry Creek kitchen as a line cook on March 12, 2026. Home address on file: 4417 Cedar Hollow Lane.
 
-The respondent's date of birth is 08/14/1991 and the last four digits of her identification number are 6042. Contact was made at her place of employment located at 200 Harbor Street.
+The employee's date of birth is 08/14/1991 and the last four digits of the payroll ID are 6042. Emergency contact is Elena Voss, reachable at 200 Harbor Street.
 
-Sworn before me this 14th day of March, 2026.`
+Record reviewed by the kitchen manager on the 14th day of March, 2026.`
 
 const mark = (phrase, reason) => {
   const start = docText.indexOf(phrase)
@@ -26,7 +26,7 @@ const base = [
   mark("200 Harbor Street", "PII"),
 ]
 
-const reasons = ["PII", "Privileged", "Confidential", "Other"]
+const reasons = ["PII", "Restricted", "Confidential", "Other"]
 
 const editRedactions = ref(base.map((r) => ({ ...r })))
 const revealRedactions = ref(base.map((r) => ({ ...r })))

@@ -36,7 +36,7 @@ const running = [
   <Story title="EvalScorecard">
     <Variant title="Completed run">
       <Card padded style="max-width: 460px;">
-        <EvalScorecard name="Contract extraction" :results="results" />
+        <EvalScorecard name="Recipe extraction" :results="results" />
       </Card>
     </Variant>
 

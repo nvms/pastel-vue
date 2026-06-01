@@ -3,17 +3,17 @@ import Notifications from "../src/components/Notifications.vue"
 import Button from "../src/components/Button.vue"
 import { toast } from "../src/composables/toast.js"
 
-const fireSuccess = () => toast.success("Workflow saved", { description: "v2.1 is now live in Cherry Creek PG." })
-const fireInfo = () => toast.info("Edit mode on", { description: "Draft changes won't go live until signed." })
+const fireSuccess = () => toast.success("Recipe saved", { description: "v2.1 is now on the menu at Cherry Creek." })
+const fireInfo = () => toast.info("Edit mode on", { description: "Draft changes won't go live until the chef signs off." })
 const fireWarn = () => toast.warning("Approaching rate limit", { duration: 5000 })
-const fireError = () => toast.error("Couldn't sign workflow", {
-  description: "An attorney must be present in the room.",
+const fireError = () => toast.error("Couldn't publish recipe", {
+  description: "The head chef must sign off before it goes on the menu.",
   duration: 0,
 })
 const fireWithAction = () => toast({
   variant: "neutral",
   eyebrow: "Archived",
-  title: "Moved 3 cases to archive",
+  title: "Moved 3 recipes to archive",
   action: { label: "Undo", onClick: () => toast.success("Restored", { duration: 2000 }) },
 })
 const fireSticky = () => toast({

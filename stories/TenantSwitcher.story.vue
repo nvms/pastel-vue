@@ -10,10 +10,10 @@ const tenant = ref("cherry-creek")
 const tenantB = ref("cherry-creek")
 
 const tenants = [
-  { value: "cherry-creek", name: "Cherry Creek PG", sublabel: "Property group" },
-  { value: "highland", name: "Highland Residential", sublabel: "Property group" },
-  { value: "aurora-mgmt", name: "Aurora Management Co.", sublabel: "Management" },
-  { value: "summit", name: "Summit Holdings", sublabel: "Holding company" },
+  { value: "cherry-creek", name: "Cherry Creek", sublabel: "Flagship venue" },
+  { value: "union-station", name: "Union Station", sublabel: "Venue" },
+  { value: "highlands", name: "Highlands", sublabel: "Venue" },
+  { value: "pearl-district", name: "Pearl District", sublabel: "Venue" },
 ]
 
 const sections = [
@@ -22,13 +22,13 @@ const sections = [
     items: [
       { key: "inbox", label: "Inbox", icon: "inbox", badge: 4 },
       { key: "overview", label: "Overview", icon: "overview" },
-      { key: "cases", label: "Cases", icon: "cases" },
+      { key: "recipes", label: "Recipes", icon: "recipes" },
     ],
   },
   {
     title: "Configure",
     items: [
-      { key: "jurisdictions", label: "Jurisdictions", icon: "jurisdictions" },
+      { key: "venues", label: "Venues", icon: "venues" },
       { key: "workflows", label: "Workflows", icon: "workflows" },
     ],
   },
@@ -41,7 +41,7 @@ const frame = "width: 280px; height: 560px; border: 1px solid var(--ink-08); bor
   <Story title="TenantSwitcher">
     <Variant title="Standalone">
       <div style="width: 260px;">
-        <TenantSwitcher v-model="tenant" :tenants="tenants" label="Tenant" />
+        <TenantSwitcher v-model="tenant" :tenants="tenants" label="Location" />
         <p style="margin-top: 12px; font-size: 13px; color: var(--ink-60);">
           Active: <code>{{ tenant }}</code>
         </p>
@@ -52,8 +52,8 @@ const frame = "width: 280px; height: 560px; border: 1px solid var(--ink-08); bor
       <div style="width: 260px;">
         <TenantSwitcher v-model="tenant" :tenants="tenants">
           <template #footer="{ close }">
-            <button class="demo-action" @click="close">+ Add a tenant</button>
-            <button class="demo-action" @click="close">Tenant settings</button>
+            <button class="demo-action" @click="close">+ Add a location</button>
+            <button class="demo-action" @click="close">Location settings</button>
           </template>
         </TenantSwitcher>
       </div>
@@ -71,7 +71,7 @@ const frame = "width: 280px; height: 560px; border: 1px solid var(--ink-08); bor
               <Avatar name="Maya Chen" size="sm" interactive />
               <div style="display: flex; flex-direction: column; gap: 2px;">
                 <div style="font-size: 13px;">Maya Chen</div>
-                <div class="pc-mono" style="color: var(--ink-60); font-size: 9px;">PM Admin</div>
+                <div class="pc-mono" style="color: var(--ink-60); font-size: 9px;">Kitchen Manager</div>
               </div>
             </div>
           </template>

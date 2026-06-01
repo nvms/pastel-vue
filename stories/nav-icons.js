@@ -28,11 +28,11 @@ const sets = {
     poly("10 17 15 12 10 7"),
     line({ x1: 15, x2: 3, y1: 12, y2: 12 }),
   ],
-  cases: () => [
+  recipes: () => [
     rect({ width: 20, height: 14, x: 2, y: 7, rx: 2 }),
     path("M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"),
   ],
-  jurisdictions: () => [
+  venues: () => [
     line({ x1: 3, x2: 21, y1: 22, y2: 22 }),
     line({ x1: 6, x2: 6, y1: 18, y2: 11 }),
     line({ x1: 10, x2: 10, y1: 18, y2: 11 }),

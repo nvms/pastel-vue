@@ -39,9 +39,9 @@ const runDelete = () => {
 
     <Variant title="Confirm">
       <Button @click="confirmOpen = true">Delete...</Button>
-      <Modal v-model="confirmOpen" title="Delete jurisdiction?" size="sm">
+      <Modal v-model="confirmOpen" title="Delete venue?" size="sm">
         <p style="margin: 0; color: var(--ink-60); font-size: 14px;">
-          This will remove the jurisdiction and any cases associated with it.
+          This will remove the venue and any recipes associated with it.
         </p>
         <template #footer="{ close }">
           <Button variant="outline" @click="close">Cancel</Button>
@@ -51,17 +51,17 @@ const runDelete = () => {
     </Variant>
 
     <Variant title="Async confirm (loading)">
-      <Button @click="asyncOpen = true">Delete jurisdiction...</Button>
+      <Button @click="asyncOpen = true">Delete venue...</Button>
       <Modal
         v-model="asyncOpen"
-        title="Delete jurisdiction?"
+        title="Delete venue?"
         size="sm"
         :close-on-backdrop="!deleting"
         :close-on-esc="!deleting"
       >
         <p style="margin: 0; color: var(--ink-60); font-size: 14px; line-height: 1.5;">
           This permanently removes <strong style="color: var(--ink);">Denver, CO</strong>
-          and all 16 cases bound to it. This cannot be undone.
+          and all 16 recipes bound to it. This cannot be undone.
         </p>
         <template #footer="{ close }">
           <Button variant="outline" :disabled="deleting" @click="close">Cancel</Button>
@@ -72,7 +72,7 @@ const runDelete = () => {
             loading-label="Deleting…"
             @click="runDelete"
           >
-            Delete jurisdiction
+            Delete venue
           </Button>
         </template>
       </Modal>

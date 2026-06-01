@@ -3,13 +3,13 @@ import { ref } from "vue"
 import Annotator from "../src/components/Annotator.vue"
 import Card from "../src/components/Card.vue"
 
-const docText = `SERVICES AGREEMENT
+const docText = `BRAISED SHORT RIBS
 
-The Provider shall deliver the services described in Schedule A within thirty (30) business days of the Effective Date. Any delay beyond this period entitles the Client to a pro-rata refund.
+Sear the seasoned ribs on all sides over high heat for about ten (10) minutes, until deeply browned on every face.
 
-The Client agrees to provide all necessary materials and access. Fees are due within fifteen (15) days of invoice. Late payments accrue interest at 1.5% per month.
+Add the mirepoix and braising liquid, then cover the pot and braise at 300°F. Plan on about three (3) hours, until the meat pulls from the bone.
 
-This Agreement may be terminated by either party with sixty (60) days written notice.`
+The braise should rest overnight before slicing and reheating for service.`
 
 const at = (phrase) => {
   const start = docText.indexOf(phrase)
@@ -20,28 +20,28 @@ const hoursAgo = (h) => new Date(Date.now() - h * 3600 * 1000).toISOString()
 const seed = [
   {
     id: "a1",
-    ...at("thirty (30) business days"),
+    ...at("ten (10) minutes"),
     resolved: false,
     comments: [
-      { id: "c1", author: "Dana Reyes", body: "Is 30 days realistic given the Schedule A scope?", time: hoursAgo(26) },
-      { id: "c2", author: "Marcus Lee", body: "Procurement wants 45. Worth pushing back.", time: hoursAgo(20) },
-      { id: "c3", author: "You", body: "Agreed - I'll redline it to 45.", time: hoursAgo(3) },
+      { id: "c1", author: "Dana Reyes", body: "Is 10 minutes enough to brown all four faces evenly?", time: hoursAgo(26) },
+      { id: "c2", author: "Marcus Lee", body: "Pastry wants closer to 14. Worth a test.", time: hoursAgo(20) },
+      { id: "c3", author: "You", body: "Agreed - I'll bump it to 14.", time: hoursAgo(3) },
     ],
   },
   {
     id: "a2",
-    ...at("pro-rata refund"),
+    ...at("braising liquid"),
     resolved: false,
     comments: [
-      { id: "c4", author: "Dana Reyes", body: "Should we cap the refund amount?", time: hoursAgo(5) },
+      { id: "c4", author: "Dana Reyes", body: "Should we spec red wine or stock here?", time: hoursAgo(5) },
     ],
   },
   {
     id: "a3",
-    ...at("1.5% per month"),
+    ...at("three (3) hours"),
     resolved: true,
     comments: [
-      { id: "c5", author: "Marcus Lee", body: "Confirm this matches our standard terms.", time: hoursAgo(50) },
+      { id: "c5", author: "Marcus Lee", body: "Confirm this matches our standard braise time.", time: hoursAgo(50) },
       { id: "c6", author: "You", body: "Confirmed - standard.", time: hoursAgo(48) },
     ],
   },

@@ -30,13 +30,13 @@ const fullYear = buildData(380, 42)
   <Story title="ActivityHeatmap">
     <Variant title="Half year">
       <Card padded style="display: inline-block;">
-        <ActivityHeatmap :data="halfYear" :weeks="26" label="Filing activity" />
+        <ActivityHeatmap :data="halfYear" :weeks="26" label="Prep activity" />
       </Card>
     </Variant>
 
     <Variant title="Full year">
       <Card padded style="display: inline-block;">
-        <ActivityHeatmap :data="fullYear" :weeks="53" label="Document reviews" />
+        <ActivityHeatmap :data="fullYear" :weeks="53" label="Recipe reviews" />
       </Card>
     </Variant>
 
@@ -45,9 +45,9 @@ const fullYear = buildData(380, 42)
         <ActivityHeatmap
           :data="halfYear"
           :weeks="26"
-          label="Filing activity"
+          label="Prep activity"
           tooltip
-          unit="filings"
+          unit="preps"
         />
       </Card>
       <p style="margin-top: 12px; font-size: 13px; color: var(--ink-60);">

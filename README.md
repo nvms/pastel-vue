@@ -117,7 +117,7 @@ toast.error("Upload failed", {
 import { ref, computed } from "vue"
 import { TokenView, tokenize, costOf, formatUSD } from "pastel-vue"
 
-const prompt = ref("Summarize the attached contract in three bullet points.")
+const prompt = ref("Summarize the attached recipe in three bullet points.")
 const tokenCount = computed(() => tokenize(prompt.value).count)
 const cost = computed(() => costOf("gpt-5", tokenCount.value, 0))
 </script>

@@ -24,16 +24,16 @@ const current = ref("ingest")
 const completed = ref([])
 const skipped = ref([])
 
-const file = ref({ name: "complaint-2026-EVN-2401.pdf", size: "1.2 MB", pages: 14 })
+const file = ref({ name: "short-ribs-2026-RCP-2401.pdf", size: "1.2 MB", pages: 14 })
 const engine = ref("textract")
 const denoise = ref(true)
 const model = ref("claude-opus-4-7")
-const preset = ref("case-header")
+const preset = ref("recipe-header")
 const presets = [
-  { value: "case-header", label: "Case header fields" },
-  { value: "parties",     label: "Parties and counsel" },
-  { value: "dates",       label: "Key dates and deadlines" },
-  { value: "custom",      label: "Custom schema" },
+  { value: "recipe-header", label: "Recipe header fields" },
+  { value: "ingredients",   label: "Ingredients and quantities" },
+  { value: "temps",         label: "Times and temperatures" },
+  { value: "custom",        label: "Custom schema" },
 ]
 const engineLabel = computed(() =>
   engine.value === "textract" ? "AWS Textract"
@@ -46,10 +46,10 @@ const modelLabel = computed(() =>
 const presetLabel = computed(() => presets.find(p => p.value === preset.value)?.label ?? "")
 
 const fields = ref([
-  { key: "Caption",      value: "State of Colorado v. R. Watanabe" },
-  { key: "Case Number",  value: "2026-EVN-2401" },
-  { key: "Filed",        value: "2026-05-18" },
-  { key: "Court",        value: "Denver County District" },
+  { key: "Title",       value: "Braised Short Ribs" },
+  { key: "Recipe ID",   value: "2026-RCP-2401" },
+  { key: "Updated",     value: "2026-05-18" },
+  { key: "Venue",       value: "Union Station, Denver" },
 ])
 
 const canAdvance = computed(() => {
@@ -59,7 +59,7 @@ const canAdvance = computed(() => {
 const onComplete = () => { alert("Pipeline complete - file saved.") }
 
 const replaceFile = () => {
-  file.value = { name: "redaction-final-v3.pdf", size: "2.4 MB", pages: 22 }
+  file.value = { name: "short-ribs-final-v3.pdf", size: "2.4 MB", pages: 22 }
 }
 </script>
 

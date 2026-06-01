@@ -2,9 +2,9 @@
 import ScrollArea from "../src/components/ScrollArea.vue"
 import Card from "../src/components/Card.vue"
 
-const rows = Array.from({ length: 40 }, (_, i) => `Case 2026-EVN-${String(2400 + i).padStart(4, "0")}`)
+const rows = Array.from({ length: 40 }, (_, i) => `Recipe 2026-RCP-${String(2400 + i).padStart(4, "0")}`)
 const wide = Array.from({ length: 12 }, (_, i) =>
-  `Column ${i + 1} - WORKFLOW.STEPS.DRAFT_DEMAND.OUTPUT.FIELD_${i}`
+  `Column ${i + 1} - RECIPE.STEPS.BRAISE.OUTPUT.FIELD_${i}`
 )
 </script>
 

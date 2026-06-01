@@ -14,7 +14,7 @@ import Field from "../src/components/Field.vue"
         </template>
         <template #default="{ close }">
           <div style="display: flex; flex-direction: column; gap: 8px; min-width: 240px;">
-            <Field label="New name"><Input modelValue="Eviction workflow" /></Field>
+            <Field label="New name"><Input modelValue="Fall menu workflow" /></Field>
             <div style="display: flex; gap: 8px; justify-content: flex-end;">
               <Button size="sm" variant="outline" @click="close">Cancel</Button>
               <Button size="sm" variant="primary" @click="close">Save</Button>

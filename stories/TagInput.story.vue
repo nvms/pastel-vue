@@ -3,7 +3,7 @@ import { ref } from "vue"
 import TagInput from "../src/components/TagInput.vue"
 import Field from "../src/components/Field.vue"
 
-const tags = ref(["eviction", "denver", "tenant-counsel"])
+const tags = ref(["braise", "fall-menu", "r-and-d"])
 const emails = ref([])
 const validateEmail = (v) => /.+@.+\..+/.test(v) || "Must be a valid email"
 </script>

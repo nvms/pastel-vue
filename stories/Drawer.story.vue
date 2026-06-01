@@ -16,12 +16,12 @@ const bottom = ref(false)
 <template>
   <Story title="Drawer">
     <Variant title="Right (detail drawer)">
-      <Button variant="primary" @click="right = true">Open case 2026-EVN-2401</Button>
-      <Drawer v-model="right" side="right" size="md" eyebrow="Case detail" title="2026-EVN-2401">
+      <Button variant="primary" @click="right = true">Open recipe 2026-RCP-2401</Button>
+      <Drawer v-model="right" side="right" size="md" eyebrow="Recipe detail" title="2026-RCP-2401">
         <KeyValue :items="[
-          { label: 'Tenant', value: 'Aiyana Khan' },
-          { label: 'Jurisdiction', value: 'Denver County, CO' },
-          { label: 'Filed', value: 'May 14, 2026' },
+          { label: 'Owner', value: 'Aiyana Khan' },
+          { label: 'Venue', value: 'West Kitchen, Denver' },
+          { label: 'Approved', value: 'May 14, 2026' },
           { label: 'Confidence', value: '0.92' },
         ]">
           <template #value="{ item }">
@@ -31,7 +31,7 @@ const bottom = ref(false)
         </KeyValue>
 
         <p style="margin-top: 16px; color: var(--ink-60); font-size: 14px; line-height: 1.5;">
-          Tenant did not respond to the 10-day demand for compliance. Workflow proceeded to file complaint.
+          The cost sheet was not confirmed within the 48-hour window. Workflow proceeded to publish to the menu.
         </p>
 
         <template #footer="{ close }">
@@ -45,7 +45,7 @@ const bottom = ref(false)
       <Button @click="left = true">Open filters</Button>
       <Drawer v-model="left" side="left" size="sm" title="Filters">
         <div style="display: flex; flex-direction: column; gap: 12px;">
-          <Field label="Search"><Input placeholder="Case ID, tenant..." /></Field>
+          <Field label="Search"><Input placeholder="Recipe ID, owner..." /></Field>
           <Field label="Status"><Input placeholder="Any status" /></Field>
         </div>
         <template #footer="{ close }">
@@ -58,7 +58,7 @@ const bottom = ref(false)
     <Variant title="Bottom (quick action)">
       <Button @click="bottom = true">Add a note</Button>
       <Drawer v-model="bottom" side="bottom" size="sm" title="Add a note">
-        <Textarea placeholder="Internal note for the case file..." :rows="4" />
+        <Textarea placeholder="Internal note for the recipe file..." :rows="4" />
         <template #footer="{ close }">
           <Button variant="outline" @click="close">Cancel</Button>
           <Button variant="primary" @click="close">Save note</Button>

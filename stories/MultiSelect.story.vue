@@ -6,7 +6,7 @@ import Badge from "../src/components/Badge.vue"
 import Button from "../src/components/Button.vue"
 
 const tags = ref(["pending", "active"])
-const jurisdictions = ref([])
+const venues = ref([])
 const colorPicked = ref(["lavender"])
 
 const statusOptions = [
@@ -17,17 +17,17 @@ const statusOptions = [
   { value: "failed", label: "Failed" },
 ]
 
-const jurisdictionOptions = [
-  { value: "denver", label: "Denver County" },
-  { value: "arapahoe", label: "Arapahoe County" },
-  { value: "jefferson", label: "Jefferson County" },
-  { value: "boulder", label: "Boulder County" },
-  { value: "adams", label: "Adams County" },
-  { value: "douglas", label: "Douglas County" },
-  { value: "el-paso", label: "El Paso County" },
-  { value: "weld", label: "Weld County" },
-  { value: "larimer", label: "Larimer County" },
-  { value: "mesa", label: "Mesa County" },
+const venueOptions = [
+  { value: "cherry-creek", label: "Cherry Creek" },
+  { value: "union-station", label: "Union Station" },
+  { value: "highlands", label: "Highlands" },
+  { value: "pearl-district", label: "Pearl District" },
+  { value: "rino", label: "RiNo" },
+  { value: "lodo", label: "LoDo" },
+  { value: "wash-park", label: "Wash Park" },
+  { value: "capitol-hill", label: "Capitol Hill" },
+  { value: "berkeley", label: "Berkeley" },
+  { value: "sloans-lake", label: "Sloan's Lake" },
 ]
 
 const colorOptions = [
@@ -51,13 +51,13 @@ const colorOptions = [
 
     <Variant title="Searchable">
       <div style="max-width: 320px;">
-        <Field label="Jurisdictions" hint="Pick one or more counties">
+        <Field label="Venues" hint="Pick one or more venues">
           <MultiSelect
-            v-model="jurisdictions"
-            :options="jurisdictionOptions"
-            placeholder="All jurisdictions"
+            v-model="venues"
+            :options="venueOptions"
+            placeholder="All venues"
             searchable
-            search-placeholder="Search counties..."
+            search-placeholder="Search venues..."
           />
         </Field>
       </div>
@@ -92,9 +92,9 @@ const colorOptions = [
     <Variant title="Count-only trigger">
       <div style="max-width: 320px;">
         <MultiSelect
-          v-model="jurisdictions"
-          :options="jurisdictionOptions"
-          placeholder="All jurisdictions"
+          v-model="venues"
+          :options="venueOptions"
+          placeholder="All venues"
           count-only
           searchable
         />

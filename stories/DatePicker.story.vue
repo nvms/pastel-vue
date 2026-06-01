@@ -5,7 +5,7 @@ import DateRangePicker from "../src/components/DateRangePicker.vue"
 import Field from "../src/components/Field.vue"
 
 const date = ref(new Date())
-const filed = ref(null)
+const logged = ref(null)
 const range = ref({
   start: new Date(2026, 4, 1),
   end: new Date(2026, 4, 14),
@@ -17,11 +17,11 @@ const open = ref(null)
   <Story title="Date pickers">
     <Variant title="DatePicker">
       <div style="display: flex; flex-direction: column; gap: 16px; max-width: 320px; padding: 24px;">
-        <Field label="Hearing date">
+        <Field label="Service date">
           <DatePicker v-model="date" />
         </Field>
-        <Field label="Filed on" hint="Optional">
-          <DatePicker v-model="filed" placeholder="Pick a date" />
+        <Field label="Logged on" hint="Optional">
+          <DatePicker v-model="logged" placeholder="Pick a date" />
         </Field>
         <div style="font-size: 13px; color: var(--ink-60);">
           Selected: <code>{{ date?.toISOString().slice(0, 10) || "-" }}</code>
@@ -31,7 +31,7 @@ const open = ref(null)
 
     <Variant title="DateRangePicker">
       <div style="padding: 24px; max-width: 480px;">
-        <Field label="Filter cases by date">
+        <Field label="Filter recipes by date">
           <DateRangePicker v-model="range" />
         </Field>
         <div style="margin-top: 12px; font-size: 13px; color: var(--ink-60);">

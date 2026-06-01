@@ -20,7 +20,7 @@ import SectionLabel from "../src/components/SectionLabel.vue"
     <Variant title="Mono (card-header style)">
       <Card padded style="max-width: 360px;">
         <div style="display: flex; align-items: center; justify-content: space-between;">
-          <SectionLabel>Jurisdictions</SectionLabel>
+          <SectionLabel>Venues</SectionLabel>
           <ArrowLink mono>All</ArrowLink>
         </div>
         <p style="margin-top: 10px; font-size: 14px; color: var(--ink-60);">

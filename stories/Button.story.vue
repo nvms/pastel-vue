@@ -84,7 +84,7 @@ const busyLabel = ref(false)
 
     <Variant title="Icon + label">
       <div style="display: flex; gap: 8px; align-items: center;">
-        <Button icon="lucide:plus" variant="primary">New case</Button>
+        <Button icon="lucide:plus" variant="primary">New recipe</Button>
         <Button icon="lucide:download" variant="outline">Export</Button>
         <Button icon="lucide:trash-2" variant="danger">Delete</Button>
       </div>

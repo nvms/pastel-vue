@@ -63,21 +63,21 @@ const stateOptions = [
 ]
 
 const steps = [
-  { name: "draft_demand", wf: "WF_DENVER_RESIDENTIAL" },
-  { name: "draft_complaint", wf: "WF_DENVER_RESIDENTIAL" },
+  { name: "draft_prep_card", wf: "RCP_DENVER_SHORTRIBS" },
+  { name: "draft_cost_sheet", wf: "RCP_DENVER_SHORTRIBS" },
 ]
 
 const reviewItems = [
-  { tag: "Document", label: "Drafted demand (JDF 101)", path: "WORKFLOW.STEPS.DRAFT_DEMAND.OUTPUT.DEMANDPDFURL" },
-  { tag: "Fields", label: "Mapped fields preview", path: "WORKFLOW.STEPS.DRAFT_DEMAND.OUTPUT.MAPPEDFIELDS" },
-  { tag: "Rule", label: "Cited rule", path: "RULES.NOTICE" },
-  { tag: "Amount", label: "Amount breakdown", path: "CASE.ARREARSCENTS + LEASE.LATEFEECENTS × 2" },
+  { tag: "Card", label: "Drafted prep card (PC 101)", path: "RECIPE.STEPS.DRAFT_PREP_CARD.OUTPUT.PREPCARDPDFURL" },
+  { tag: "Fields", label: "Mapped ingredients preview", path: "RECIPE.STEPS.DRAFT_PREP_CARD.OUTPUT.MAPPEDINGREDIENTS" },
+  { tag: "Standard", label: "Cited food-safety standard", path: "STANDARDS.HOLDING" },
+  { tag: "Amount", label: "Plate cost breakdown", path: "RECIPE.FOODCOSTCENTS + RECIPE.WASTECENTS × 2" },
 ]
 
 const intakeRows = [
-  { label: "Intake workflow", value: "Denver Monthly Delinquency Intake · v2", link: true },
-  { label: "Spawns", value: "Denver Residential FED · v3", link: true },
-  { label: "Schedule", value: "5th of each month, 07:00 MT" },
+  { label: "Intake workflow", value: "Denver Weekly Prep Intake · v2", link: true },
+  { label: "Spawns", value: "Cherry Creek Braised Short Ribs · v3", link: true },
+  { label: "Schedule", value: "Every Monday, 07:00 MT" },
   { label: "Last run", value: "Apr 12, 2026, 3:14 AM", link: true },
   { label: "Runs to date", value: "3" },
 ]
@@ -90,11 +90,11 @@ const intakeRows = [
       <Panel gradient style="max-width: 460px;">
         <template #header>
           <h3 class="pc-panel__title" style="font-size: 24px; font-weight: 500; letter-spacing: -0.4px; margin: 0;">
-            Legal document drafting
+            Prep card drafting
           </h3>
           <p style="margin: 6px 0 0; color: var(--ink-60); font-size: 15px; line-height: 1.45;">
-            Generates the demand, complaint, summons, and verification PDFs by mapping case
-            data into the form schema. Monetary values are computed in code; the model fills typed slots.
+            Generates the prep card, cost sheet, plating guide, and allergen sheet PDFs by mapping recipe
+            data into the card schema. Plate costs are computed in code; the model fills typed slots.
           </p>
         </template>
 
@@ -134,11 +134,11 @@ const intakeRows = [
       </Panel>
     </Variant>
 
-    <!-- ---- Reproduction of the jurisdiction wizard step ---- -->
+    <!-- ---- Reproduction of the venue wizard step ---- -->
     <Variant title="Wizard step">
       <Panel style="max-width: 860px;">
         <template #header>
-          <SectionLabel size="md">Jurisdiction</SectionLabel>
+          <SectionLabel size="md">Venue</SectionLabel>
         </template>
         <template #aside>
           <Badge>Step 1 of 4</Badge>
@@ -156,7 +156,7 @@ const intakeRows = [
           </div>
 
           <div class="presets">
-            <SectionLabel>Recent jurisdictions</SectionLabel>
+            <SectionLabel>Recent venues</SectionLabel>
             <div class="presets__chips">
               <button
                 v-for="p in presets"
@@ -197,7 +197,7 @@ const intakeRows = [
 
     <!-- ---- Plain panel ---- -->
     <Variant title="Plain (no header gradient)">
-      <Panel title="Workflow settings" description="Control how this workflow behaves at runtime." style="max-width: 520px;">
+      <Panel title="Recipe settings" description="Control how this recipe behaves at runtime." style="max-width: 520px;">
         <PanelSection label="General">
           <KeyValue :items="[
             { label: 'Version', value: 'v2.1' },
@@ -214,18 +214,18 @@ const intakeRows = [
       </Panel>
     </Variant>
 
-    <!-- ---- Reproduction of the attorney review / sign-off panel ---- -->
+    <!-- ---- Reproduction of the head chef review / sign-off panel ---- -->
     <Variant title="Review / sign-off panel">
       <Panel accent="lavender" gradient elevated style="max-width: 900px;">
         <template #header>
           <div class="rev-tagline">
-            <Badge variant="solid" size="md">Action required · Attorney of record</Badge>
-            <span class="rev-tagline__who">Theodora Whitfield, Esq. (CO-48217)</span>
+            <Badge variant="solid" size="md">Action required · Head Chef</Badge>
+            <span class="rev-tagline__who">Theodora Whitfield (CO-48217)</span>
           </div>
-          <h2 class="rev-title">Attorney review (demand)</h2>
+          <h2 class="rev-title">Chef review (prep card)</h2>
           <p class="rev-desc">
-            Hard sign-off step. The attorney sees the rendered demand alongside the case data,
-            the rule citation, and the amount-computation breakdown. They can approve, reject
+            Hard sign-off step. The head chef sees the rendered prep card alongside the recipe data,
+            the food-safety standard, and the plate-cost breakdown. They can approve, reject
             with a reason, or send back for revision.
           </p>
         </template>
@@ -244,7 +244,7 @@ const intakeRows = [
           <div class="rev-actions">
             <Button variant="primary">Approve and sign</Button>
             <Button variant="danger" hint="+ Notes">Send back for revision</Button>
-            <Button variant="danger" hint="+ Reason">Reject - do not file</Button>
+            <Button variant="danger" hint="+ Reason">Reject - keep off the menu</Button>
           </div>
         </PanelSection>
       </Panel>
@@ -254,7 +254,7 @@ const intakeRows = [
     <Variant title="Intake summary panel">
       <Panel gradient style="max-width: 720px;">
         <template #header>
-          <SectionLabel size="md">Denver County</SectionLabel>
+          <SectionLabel size="md">West Kitchen</SectionLabel>
           <h2 class="intake-title">Denver, CO</h2>
         </template>
         <template #aside>

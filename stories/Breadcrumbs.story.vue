@@ -10,9 +10,9 @@ const picked = ref(null)
   <Story title="Breadcrumbs">
     <Variant title="Default">
       <Breadcrumbs :items="[
-        { label: 'Jurisdictions', to: '/jurisdictions' },
-        { label: 'Denver County', to: '/jurisdictions/denver' },
-        { label: 'C.R.S. 13-40-104' },
+        { label: 'Venues', to: '/venues' },
+        { label: 'West Kitchen', to: '/venues/west-kitchen' },
+        { label: 'FDA Food Code § 3-501.14' },
       ]" />
     </Variant>
 
@@ -22,7 +22,7 @@ const picked = ref(null)
         :items="[
           { label: 'Home', to: '/', icon: 'home' },
           { label: 'Workflows', to: '/workflows', icon: 'workflows' },
-          { label: 'Eviction intake', to: '/workflows/intake' },
+          { label: 'Recipe intake', to: '/workflows/intake' },
           { label: 'v2.1' },
         ]"
       >
@@ -38,13 +38,13 @@ const picked = ref(null)
           separator="›"
           :max-items="4"
           :items="[
-            { label: 'Jurisdictions' },
+            { label: 'Venues' },
             { label: 'Colorado' },
-            { label: 'Denver County' },
-            { label: 'County Court' },
-            { label: 'Division 16' },
-            { label: 'Hon. Whitfield' },
-            { label: 'Case 2026-EVN-2401' },
+            { label: 'West Kitchen' },
+            { label: 'Mains' },
+            { label: 'Station 16' },
+            { label: 'Chef Whitfield' },
+            { label: 'Recipe 2026-RCP-2401' },
           ]"
           @select="(item) => (picked = item.label)"
         />

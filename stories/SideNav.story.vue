@@ -16,15 +16,15 @@ const sectionsBare = [
       { key: "inbox", label: "Inbox", badge: 4 },
       { key: "overview", label: "Overview" },
       { key: "intakes", label: "Intake runs" },
-      { key: "cases", label: "Cases" },
+      { key: "recipes", label: "Recipes" },
     ],
   },
   {
     title: "Configure",
     items: [
-      { key: "jurisdictions", label: "Jurisdictions" },
+      { key: "venues", label: "Venues" },
       { key: "workflows", label: "Workflows" },
-      { key: "forms", label: "Forms" },
+      { key: "forms", label: "Prep cards" },
     ],
   },
 ]
@@ -36,15 +36,15 @@ const sectionsIcons = [
       { key: "inbox", label: "Inbox", icon: "inbox", badge: 4 },
       { key: "overview", label: "Overview", icon: "overview" },
       { key: "intakes", label: "Intake runs", icon: "intakes" },
-      { key: "cases", label: "Cases", icon: "cases" },
+      { key: "recipes", label: "Recipes", icon: "recipes" },
     ],
   },
   {
     title: "Configure",
     items: [
-      { key: "jurisdictions", label: "Jurisdictions", icon: "jurisdictions" },
+      { key: "venues", label: "Venues", icon: "venues" },
       { key: "workflows", label: "Workflows", icon: "workflows" },
-      { key: "forms", label: "Forms", icon: "forms" },
+      { key: "forms", label: "Prep cards", icon: "forms" },
     ],
   },
   {
@@ -89,7 +89,7 @@ const frame = "width: 280px; height: 540px; border: 1px solid var(--ink-08); bor
           <template #header>
             <div>
               <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.5px;">Pastel</div>
-              <div class="pc-mono" style="color: var(--ink-60); font-size: 10px;">Eviction workflow</div>
+              <div class="pc-mono" style="color: var(--ink-60); font-size: 10px;">Kitchen workflow</div>
             </div>
           </template>
           <template #footer>
@@ -114,7 +114,7 @@ const frame = "width: 280px; height: 540px; border: 1px solid var(--ink-08); bor
           <template #header>
             <div>
               <div style="font-size: 18px; font-weight: 500; letter-spacing: -0.5px;">Pastel</div>
-              <div class="pc-mono" style="color: var(--ink-60); font-size: 10px;">Eviction workflow</div>
+              <div class="pc-mono" style="color: var(--ink-60); font-size: 10px;">Kitchen workflow</div>
             </div>
           </template>
           <template #footer>
@@ -136,12 +136,12 @@ const frame = "width: 280px; height: 540px; border: 1px solid var(--ink-08); bor
           :sections="[{
             title: 'Sources',
             items: [
-              { key: 'statutes', label: 'Statutes', accent: '#bdbbff' },
-              { key: 'court', label: 'Court rules', accent: '#ffd6f5' },
-              { key: 'forms', label: 'Forms', accent: '#d6e1ff' },
+              { key: 'foodcode', label: 'Food Code', accent: '#bdbbff' },
+              { key: 'allergens', label: 'Allergen guide', accent: '#ffd6f5' },
+              { key: 'forms', label: 'Prep cards', accent: '#d6e1ff' },
             ],
           }]"
-          :active-key="'statutes'"
+          :active-key="'foodcode'"
         >
           <template #icon="{ item }">
             <span
