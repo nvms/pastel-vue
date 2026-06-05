@@ -360,17 +360,43 @@ const intakeRows = [
   color: var(--ink);
   max-width: 760px;
 }
-.rev-rows { display: flex; flex-direction: column; gap: 10px; }
-.rev-row { display: flex; align-items: baseline; gap: 12px; }
-.rev-row__label { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; }
+.rev-rows {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  row-gap: 10px;
+  column-gap: 16px;
+}
+.rev-row { display: contents; }
+.rev-row__label {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
 .rev-row__path {
+  min-width: 0;
   font-family: var(--mono);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--ink-40);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .rev-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .rev-rows { display: flex; flex-direction: column; gap: 16px; }
+  .rev-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .rev-actions { flex-direction: column; align-items: stretch; }
+}
 
 /* intake summary panel */
 .intake-title {

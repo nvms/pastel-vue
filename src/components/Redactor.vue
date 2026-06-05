@@ -214,27 +214,30 @@ onBeforeUnmount(() => {
 
   <!-- selection toolbar - appears above a fresh text selection -->
   <Teleport to="body">
-    <div
-      v-if="toolbarOpen"
-      ref="toolbarRef"
-      class="pc-redactor__toolbar"
-      :style="{ top: `${toolbarPos.top}px`, left: `${toolbarPos.left}px` }"
-    >
-      <button type="button" class="pc-redactor__redact-btn" @click="applyRedaction">
-        Redact selection
-      </button>
-    </div>
+    <Transition name="pc-redactor-toolbar">
+      <div
+        v-if="toolbarOpen"
+        ref="toolbarRef"
+        class="pc-redactor__toolbar"
+        :style="{ top: `${toolbarPos.top}px`, left: `${toolbarPos.left}px` }"
+      >
+        <button type="button" class="pc-redactor__redact-btn" @click="applyRedaction">
+          Redact selection
+        </button>
+      </div>
+    </Transition>
   </Teleport>
 
   <!-- per-redaction menu -->
   <Teleport to="body">
-    <div
-      v-if="menuOpen"
-      ref="menuRef"
-      class="pc-redactor__menu"
-      role="menu"
-      :style="[floatingStyles, { opacity: isPositioned ? 1 : 0 }]"
-    >
+    <Transition name="pc-redactor-menu">
+      <div
+        v-if="menuOpen"
+        ref="menuRef"
+        :class="['pc-redactor__menu', { 'pc-redactor__menu--ready': isPositioned }]"
+        role="menu"
+        :style="floatingStyles"
+      >
       <template v-if="reasons.length">
         <div class="pc-redactor__menu-label">Reason</div>
         <button
@@ -271,7 +274,8 @@ onBeforeUnmount(() => {
         <Icon icon="lucide:trash-2" />
         <span>Remove redaction</span>
       </button>
-    </div>
+      </div>
+    </Transition>
   </Teleport>
 </template>
 
@@ -330,6 +334,17 @@ onBeforeUnmount(() => {
   padding: 4px;
   box-shadow: var(--shadow-medium);
 }
+/* transform handles placement, so motion animates the translate property */
+.pc-redactor-toolbar-enter-active { animation: pc-redactor-toolbar-in 120ms ease-out; }
+.pc-redactor-toolbar-leave-active { animation: pc-redactor-toolbar-out 110ms ease-in forwards; }
+@keyframes pc-redactor-toolbar-in {
+  from { opacity: 0; translate: 0 4px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes pc-redactor-toolbar-out {
+  from { opacity: 1; translate: 0 0; }
+  to { opacity: 0; translate: 0 4px; }
+}
 .pc-redactor__redact-btn {
   display: inline-flex;
   align-items: center;
@@ -359,7 +374,25 @@ onBeforeUnmount(() => {
   border-radius: var(--radius-comfy);
   box-shadow: var(--shadow-medium);
   padding: 4px;
-  transition: opacity 90ms ease;
+  opacity: 0;
+  visibility: hidden;
+}
+/* floating-ui drives position via transform, so the enter/exit motion animates
+   the translate property to avoid clobbering it - matches DropdownMenu */
+.pc-redactor__menu--ready {
+  visibility: visible;
+  animation: pc-redactor-menu-in 120ms ease-out forwards;
+}
+.pc-redactor-menu-leave-active.pc-redactor__menu--ready {
+  animation: pc-redactor-menu-out 110ms ease-in forwards;
+}
+@keyframes pc-redactor-menu-in {
+  from { opacity: 0; translate: 0 -4px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes pc-redactor-menu-out {
+  from { opacity: 1; translate: 0 0; }
+  to { opacity: 0; translate: 0 -4px; }
 }
 .pc-redactor__menu-label {
   font-family: var(--mono);
