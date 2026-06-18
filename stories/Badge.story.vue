@@ -12,6 +12,7 @@ import Badge from "../src/components/Badge.vue"
         <Badge variant="paused" dot>Paused</Badge>
         <Badge variant="failed" dot>Failed</Badge>
         <Badge variant="draft">Draft</Badge>
+        <Badge variant="solid">Solid</Badge>
       </div>
     </Variant>
   </Story>
