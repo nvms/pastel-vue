@@ -2,8 +2,6 @@
 import Spinner from "../src/components/Spinner.vue"
 import Kbd from "../src/components/Kbd.vue"
 import Divider from "../src/components/Divider.vue"
-import EmptyState from "../src/components/EmptyState.vue"
-import Button from "../src/components/Button.vue"
 </script>
 
 <template>
@@ -23,11 +21,6 @@ import Button from "../src/components/Button.vue"
         <Divider />
         <div>Below</div>
       </div>
-    </Variant>
-    <Variant title="EmptyState">
-      <EmptyState icon="∅" title="No runs yet" description="When an intake starts, it'll show up here.">
-        <Button variant="primary">Start a run</Button>
-      </EmptyState>
     </Variant>
   </Story>
 </template>
