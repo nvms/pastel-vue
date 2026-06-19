@@ -4,6 +4,15 @@ import Button from "../src/components/Button.vue"
 
 const busy = ref(false)
 const busyLabel = ref(false)
+
+// simulate an async action that resolves almost instantly
+const fastBusy = ref(false)
+const instantBusy = ref(false)
+async function runFast(flag) {
+  flag.value = true
+  await new Promise((r) => setTimeout(r, 50))
+  flag.value = false
+}
 </script>
 
 <template>
@@ -60,6 +69,27 @@ const busyLabel = ref(false)
         <Button variant="primary" :loading="busyLabel" loading-label="Publishing your workflow…">
           Publish
         </Button>
+      </div>
+    </Variant>
+
+    <Variant title="Fast async (min hold)">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <Button variant="primary" :loading="fastBusy" loading-label="Saving…" @click="runFast(fastBusy)">
+            Save
+          </Button>
+          <span style="font-size: 13px; color: var(--ink-60);">
+            50ms action, default 400ms hold - the spinner stays visible instead of flashing
+          </span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <Button variant="outline" :loading="instantBusy" :min-loading-ms="0" loading-label="Saving…" @click="runFast(instantBusy)">
+            Save
+          </Button>
+          <span style="font-size: 13px; color: var(--ink-60);">
+            same 50ms action, min-loading-ms=0 - the old jitter, for comparison
+          </span>
+        </div>
       </div>
     </Variant>
 

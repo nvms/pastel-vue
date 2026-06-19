@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, useSlots, watch, nextTick } from "vue"
+import { ref, computed, useSlots, watch, nextTick, onUnmounted } from "vue"
 import { Icon } from "@iconify/vue"
 
 const props = defineProps({
@@ -9,6 +9,9 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   // optional label shown while loading (e.g. "Saving"); falls back to the slot
   loadingLabel: { type: String, default: "" },
+  // minimum time the loading state stays visible once shown, so a fast async
+  // action still flashes the spinner/label instead of jittering. set 0 to disable
+  minLoadingMs: { type: Number, default: 400 },
   // optional trailing mono chip, e.g. "+ Notes"
   hint: { type: String, default: "" },
   // iconify icon name, e.g. "lucide:settings" - icon-only when no slot content
@@ -20,13 +23,39 @@ const slots = useSlots()
 // icon + no label -> a perfect-square icon button
 const iconOnly = computed(() => !!props.icon && !slots.default)
 
+// loading shown to the user. follows props.loading on, but holds on for at least
+// minLoadingMs before turning off so a quick async action stays visible
+const loadingShown = ref(props.loading)
+let loadingStart = 0
+let releaseTimer = null
+
+watch(() => props.loading, (on) => {
+  if (on) {
+    if (releaseTimer) { clearTimeout(releaseTimer); releaseTimer = null }
+    loadingStart = performance.now()
+    loadingShown.value = true
+    return
+  }
+  const remaining = props.minLoadingMs - (performance.now() - loadingStart)
+  if (remaining <= 0) {
+    loadingShown.value = false
+    return
+  }
+  releaseTimer = setTimeout(() => {
+    loadingShown.value = false
+    releaseTimer = null
+  }, remaining)
+})
+
+onUnmounted(() => { if (releaseTimer) clearTimeout(releaseTimer) })
+
 const btnRef = ref(null)
 let cancelWidthAnim = null
 
 // animate the button's width whenever loading toggles, so the spinner appearing
 // and an optional label swap resize the button smoothly instead of jumping.
 // skipped for icon-only buttons - they are fixed squares.
-watch(() => props.loading, async () => {
+watch(loadingShown, async () => {
   const el = btnRef.value
   if (!el || iconOnly.value) return
 
@@ -74,29 +103,29 @@ watch(() => props.loading, async () => {
   <button
     ref="btnRef"
     :type="type"
-    :disabled="disabled || loading"
-    :aria-busy="loading || undefined"
+    :disabled="disabled || loadingShown"
+    :aria-busy="loadingShown || undefined"
     :class="[
       'pc-btn',
       `pc-btn--${variant}`,
       `pc-btn--${size}`,
-      { 'pc-btn--loading': loading, 'pc-btn--icon': iconOnly },
+      { 'pc-btn--loading': loadingShown, 'pc-btn--icon': iconOnly },
     ]"
   >
     <!-- icon-only: just the icon, or a spinner while loading -->
     <template v-if="iconOnly">
-      <span v-if="loading" class="pc-btn__spinner pc-btn__spinner--solo" aria-hidden="true" />
+      <span v-if="loadingShown" class="pc-btn__spinner pc-btn__spinner--solo" aria-hidden="true" />
       <Icon v-else :icon="icon" class="pc-btn__icon" aria-hidden="true" />
     </template>
 
     <!-- label button: collapsible spinner, optional leading icon, label, hint -->
     <template v-else>
-      <span class="pc-btn__spinner-wrap" :class="{ 'pc-btn__spinner-wrap--on': loading }" aria-hidden="true">
+      <span class="pc-btn__spinner-wrap" :class="{ 'pc-btn__spinner-wrap--on': loadingShown }" aria-hidden="true">
         <span class="pc-btn__spinner" />
       </span>
       <Icon v-if="icon" :icon="icon" class="pc-btn__icon" aria-hidden="true" />
       <span class="pc-btn__label">
-        <template v-if="loading && loadingLabel">{{ loadingLabel }}</template>
+        <template v-if="loadingShown && loadingLabel">{{ loadingLabel }}</template>
         <slot v-else />
       </span>
       <span v-if="hint" class="pc-btn__hint">{{ hint }}</span>
