@@ -125,8 +125,10 @@ watch(loadingShown, async () => {
       </span>
       <Icon v-if="icon" :icon="icon" class="pc-btn__icon" aria-hidden="true" />
       <span class="pc-btn__label">
-        <template v-if="loadingShown && loadingLabel">{{ loadingLabel }}</template>
-        <slot v-else />
+        <Transition name="pc-btn-roll">
+          <span v-if="loadingShown && loadingLabel" key="load" class="pc-btn__label-text">{{ loadingLabel }}</span>
+          <span v-else key="idle" class="pc-btn__label-text"><slot /></span>
+        </Transition>
       </span>
       <span v-if="hint" class="pc-btn__hint">{{ hint }}</span>
     </template>
@@ -207,7 +209,21 @@ watch(loadingShown, async () => {
 .pc-btn--sm { padding: 0 10px; min-height: var(--control-h-sm); font-size: 13px; }
 .pc-btn--lg { padding: 0 18px; min-height: var(--control-h-lg); font-size: 15px; }
 
-.pc-btn__label { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.pc-btn__label { position: relative; display: inline-flex; align-items: center; white-space: nowrap; }
+.pc-btn__label-text { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+
+/* the loading label rolls up into place, matching CodeBlock's copy swap. the
+   leaving label is taken out of flow so the entering label defines the width -
+   otherwise the button's width animation measures the wrong target and stutters */
+.pc-btn-roll-enter-active,
+.pc-btn-roll-leave-active { transition: opacity 175ms ease, transform 175ms ease; }
+.pc-btn-roll-leave-active { position: absolute; top: 0; left: 0; }
+.pc-btn-roll-enter-from { opacity: 0; transform: translateY(7px); }
+.pc-btn-roll-leave-to { opacity: 0; transform: translateY(-7px); }
+@media (prefers-reduced-motion: reduce) {
+  .pc-btn-roll-enter-active,
+  .pc-btn-roll-leave-active { transition: none; }
+}
 
 /* icon */
 .pc-btn__icon { font-size: 16px; flex-shrink: 0; }

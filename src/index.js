@@ -91,6 +91,14 @@ export { default as TokenView } from "./components/TokenView.vue"
 export { tokenize } from "./tokenizer.js"
 export { default as Conversation } from "./components/Conversation.vue"
 
+// chat
+export { default as ChatThread } from "./components/ChatThread.vue"
+export { default as ChatScroller } from "./components/ChatScroller.vue"
+export { default as ChatMessage } from "./components/ChatMessage.vue"
+export { default as ChatComposer } from "./components/ChatComposer.vue"
+export { default as TypingIndicator } from "./components/TypingIndicator.vue"
+export { default as ToolCall } from "./components/ToolCall.vue"
+
 // evaluation suites
 export { default as EvalSuite } from "./components/EvalSuite.vue"
 export { default as EvalScorecard } from "./components/EvalScorecard.vue"
@@ -117,4 +125,6 @@ export { default as Table } from "./components/Table.vue"
 
 // composables
 export { useClickOutside } from "./composables/useClickOutside.js"
+export { useSmoothStream, SMOOTH_STREAM_DEFAULTS } from "./composables/useSmoothStream.js"
+export { useStickToBottom } from "./composables/useStickToBottom.js"
 export { toast, dismissToast, clearToasts, toasts } from "./composables/toast.js"

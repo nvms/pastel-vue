@@ -72,27 +72,6 @@ async function runFast(flag) {
       </div>
     </Variant>
 
-    <Variant title="Fast async (min hold)">
-      <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div style="display: flex; gap: 12px; align-items: center;">
-          <Button variant="primary" :loading="fastBusy" loading-label="Saving…" @click="runFast(fastBusy)">
-            Save
-          </Button>
-          <span style="font-size: 13px; color: var(--ink-60);">
-            50ms action, default 400ms hold - the spinner stays visible instead of flashing
-          </span>
-        </div>
-        <div style="display: flex; gap: 12px; align-items: center;">
-          <Button variant="outline" :loading="instantBusy" :min-loading-ms="0" loading-label="Saving…" @click="runFast(instantBusy)">
-            Save
-          </Button>
-          <span style="font-size: 13px; color: var(--ink-60);">
-            same 50ms action, min-loading-ms=0 - the old jitter, for comparison
-          </span>
-        </div>
-      </div>
-    </Variant>
-
     <Variant title="Icon button (square)">
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div style="display: flex; gap: 8px; align-items: center;">

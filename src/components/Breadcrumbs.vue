@@ -130,7 +130,7 @@ const onHiddenClick = (item, close, e) => {
   padding: 2px 4px;
   border-radius: 3px;
   outline: none;
-  transition: color 140ms ease, background 140ms ease, box-shadow 140ms ease;
+  transition: color 140ms ease, background 140ms ease, box-shadow 140ms ease, transform 60ms ease;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
@@ -138,6 +138,7 @@ const onHiddenClick = (item, close, e) => {
   max-width: 200px;
 }
 .pc-crumbs__link:hover:not(.pc-crumbs__link--current) { color: var(--ink); background: var(--ink-04); }
+.pc-crumbs__link:active:not(.pc-crumbs__link--current) { background: var(--ink-08); color: var(--ink); transform: translateY(1px); }
 .pc-crumbs__link:focus-visible { box-shadow: var(--focus-ring); }
 .pc-crumbs__link--current {
   color: var(--ink);
@@ -167,10 +168,11 @@ const onHiddenClick = (item, close, e) => {
   color: var(--ink-40);
   cursor: pointer;
   outline: none;
-  transition: color 140ms ease, background 140ms ease, box-shadow 140ms ease;
+  transition: color 140ms ease, background 140ms ease, box-shadow 140ms ease, transform 60ms ease;
 }
 .pc-crumbs__ellipsis-btn:hover,
 .pc-crumbs__ellipsis-btn--open { color: var(--ink); background: var(--ink-04); }
+.pc-crumbs__ellipsis-btn:active { background: var(--ink-08); color: var(--ink); transform: translateY(1px); }
 .pc-crumbs__ellipsis-btn:focus-visible { box-shadow: var(--focus-ring); }
 .pc-crumbs__ellipsis {
   letter-spacing: 0.05em;

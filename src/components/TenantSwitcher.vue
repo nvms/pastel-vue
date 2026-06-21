@@ -125,10 +125,11 @@ const choose = (t) => {
   cursor: pointer;
   outline: none;
   text-align: left;
-  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 60ms ease;
 }
 .pc-tenant__trigger:hover:not(:disabled) { background: var(--ink-04); border-color: var(--ink-20); }
 .pc-tenant__trigger--open { background: var(--ink-04); border-color: var(--ink-20); }
+.pc-tenant__trigger:active:not(:disabled) { background: var(--ink-08); border-color: var(--ink-20); transform: translateY(1px); }
 .pc-tenant__trigger:focus-visible { box-shadow: var(--focus-ring); border-color: var(--midnight); }
 .pc-tenant__trigger:disabled { opacity: 0.5; cursor: not-allowed; }
 

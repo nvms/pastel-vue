@@ -68,8 +68,12 @@ onBeforeUnmount(() => clearTimeout(copyTimer))
         :class="['pc-codeblock__copy', { 'pc-codeblock__copy--done': copied }]"
         @click="copy"
       >
-        <Icon :icon="copied ? 'lucide:check' : 'lucide:copy'" />
-        {{ copied ? "Copied" : "Copy" }}
+        <Transition name="pc-copy" mode="out-in">
+          <span :key="copied" class="pc-codeblock__copy-inner">
+            <Icon :icon="copied ? 'lucide:check' : 'lucide:copy'" />
+            {{ copied ? "Copied" : "Copy" }}
+          </span>
+        </Transition>
       </button>
     </div>
 
@@ -133,7 +137,9 @@ onBeforeUnmount(() => clearTimeout(copyTimer))
 .pc-codeblock__copy {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  /* hold the wider "Copied" width so the label swap never jolts the layout */
+  min-width: 76px;
   height: 26px;
   padding: 0 9px;
   border-radius: var(--radius-sharp);
@@ -146,12 +152,25 @@ onBeforeUnmount(() => clearTimeout(copyTimer))
   font-weight: 500;
   cursor: pointer;
   outline: none;
-  transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
+  transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease, transform 60ms ease;
 }
 .pc-codeblock__copy:hover { background: var(--ink-08); color: var(--ink); }
+.pc-codeblock__copy:active { transform: translateY(1px); }
 .pc-codeblock__copy:focus-visible { box-shadow: var(--focus-ring); }
 .pc-codeblock__copy--done { color: var(--status-active); }
 .pc-codeblock__copy :deep(svg) { width: 13px; height: 13px; }
+
+.pc-codeblock__copy-inner { display: inline-flex; align-items: center; gap: 5px; }
+
+/* directional cross-fade between Copy and Copied */
+.pc-copy-enter-active,
+.pc-copy-leave-active { transition: opacity 110ms ease, transform 110ms ease; }
+.pc-copy-enter-from { opacity: 0; transform: translateY(3px); }
+.pc-copy-leave-to { opacity: 0; transform: translateY(-3px); }
+@media (prefers-reduced-motion: reduce) {
+  .pc-copy-enter-active,
+  .pc-copy-leave-active { transition: none; }
+}
 
 .pc-codeblock__body { width: 100%; }
 
