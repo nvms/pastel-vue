@@ -2,6 +2,7 @@
 import { ref, provide } from "vue"
 import { Icon } from "@iconify/vue"
 import { useStickToBottom } from "../composables/useStickToBottom.js"
+import { useOverlayScrollbar } from "../composables/useOverlayScrollbar.js"
 
 const props = defineProps({
   // how close, in px, counts as "at the bottom" for pinning / re-pinning
@@ -18,6 +19,8 @@ const { pinned, isAtBottom, scrollToBottom, reveal } = useStickToBottom(scrollRe
   threshold: props.threshold,
 })
 
+const bar = useOverlayScrollbar(scrollRef, contentRef)
+
 // let descendant collapsibles (e.g. ToolCall) ask to be revealed on expand,
 // without coupling them to this component
 provide("pcChatScroller", { reveal })
@@ -26,11 +29,30 @@ defineExpose({ pinned, isAtBottom, scrollToBottom, reveal })
 </script>
 
 <template>
-  <div class="pc-scroller">
+  <div
+    class="pc-scroller"
+    @pointerenter="bar.wake"
+    @pointermove="bar.wake"
+    @pointerleave="bar.sleep"
+    @wheel="bar.wake"
+  >
     <div ref="scrollRef" class="pc-scroller__viewport">
       <div ref="contentRef" class="pc-scroller__content" :style="{ '--pc-scroller-gap': `${gap}px` }">
         <slot />
       </div>
+    </div>
+
+    <div
+      v-if="bar.overflow.value"
+      class="pc-scroller__scrollbar"
+      :class="{ 'pc-scroller__scrollbar--show': bar.active.value || bar.dragging.value }"
+      @pointerdown="bar.onTrackDown"
+    >
+      <div
+        class="pc-scroller__thumb"
+        :style="{ height: `${bar.thumbSize.value}px`, transform: `translateY(${bar.thumbOffset.value}px)` }"
+        @pointerdown.stop="bar.onThumbDown"
+      />
     </div>
 
     <slot name="overlay" :pinned="pinned" :is-at-bottom="isAtBottom" :scroll-to-bottom="scrollToBottom">
@@ -64,16 +86,59 @@ defineExpose({ pinned, isAtBottom, scrollToBottom, reveal })
   /* take full control of bottom-pinning - the browser's own scroll anchoring
      would otherwise shift scrollTop when content above the viewport grows */
   overflow-anchor: none;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ink-20) transparent;
+  /* native bar is hidden - the overlay scrollbar below renders the thumb */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-.pc-scroller__viewport::-webkit-scrollbar { width: 8px; }
-.pc-scroller__viewport::-webkit-scrollbar-thumb { background: var(--ink-20); border-radius: 4px; }
+.pc-scroller__viewport::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
 .pc-scroller__content {
   display: flex;
   flex-direction: column;
   gap: var(--pc-scroller-gap);
+}
+
+/* overlaid scrollbar - never reserves layout space, track stays transparent so
+   it can't clash with the surface underneath */
+.pc-scroller__scrollbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 11px;
+  padding: 3px;
+  display: flex;
+  user-select: none;
+  touch-action: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+  z-index: 2;
+}
+.pc-scroller__scrollbar--show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.pc-scroller__thumb {
+  width: 100%;
+  position: relative;
+  background: var(--ink-20);
+  border-radius: 999px;
+  transition: background 140ms ease;
+}
+.pc-scroller__thumb:hover,
+.pc-scroller__thumb:active { background: var(--ink-40); }
+/* enlarged invisible hit target so the thin thumb is easy to grab */
+.pc-scroller__thumb::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  min-width: 40px;
+  min-height: 40px;
 }
 
 .pc-scroller__jump {
@@ -95,7 +160,9 @@ defineExpose({ pinned, isAtBottom, scrollToBottom, reveal })
   font-size: 17px;
   transition: background 120ms ease, transform 60ms ease, box-shadow 120ms ease;
 }
-.pc-scroller__jump:hover { background: var(--ink-04); }
+/* layer the tint over paper so the button stays opaque on hover - a bare
+   var(--ink-04) would replace the fill and let content show through */
+.pc-scroller__jump:hover { background: linear-gradient(var(--ink-04), var(--ink-04)), var(--paper); }
 .pc-scroller__jump:active { transform: translateX(-50%) translateY(1px); }
 .pc-scroller__jump:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
@@ -111,5 +178,6 @@ defineExpose({ pinned, isAtBottom, scrollToBottom, reveal })
   .pc-scroller__jump,
   .pc-scroller-jump-enter-active,
   .pc-scroller-jump-leave-active { transition: none; }
+  .pc-scroller__scrollbar { transition: opacity 80ms ease; }
 }
 </style>
