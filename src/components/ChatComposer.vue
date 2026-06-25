@@ -75,6 +75,16 @@ onMounted(() => {
   if (taRef.value) taRef.value.value = props.modelValue
   resize()
 })
+
+const focus = () => {
+  const el = taRef.value
+  if (!el) return
+  el.focus()
+  const end = el.value.length
+  el.setSelectionRange(end, end)
+}
+
+defineExpose({ focus })
 </script>
 
 <template>

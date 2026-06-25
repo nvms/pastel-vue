@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from "vue"
+import { ref, nextTick } from "vue"
 import ChatThread from "../src/components/ChatThread.vue"
 import ChatScroller from "../src/components/ChatScroller.vue"
 import ChatMessage from "../src/components/ChatMessage.vue"
 import ChatComposer from "../src/components/ChatComposer.vue"
+import PromptMenu from "../src/components/PromptMenu.vue"
 import TypingIndicator from "../src/components/TypingIndicator.vue"
 import ToolCall from "../src/components/ToolCall.vue"
 import Button from "../src/components/Button.vue"
@@ -34,6 +35,21 @@ function send(value) {
 const composerDraft = ref("")
 const loadingDraft = ref("Generating the summary now…")
 const busy = ref(false)
+
+// prompt menu: selecting an item drops its text into the composer, then focuses
+// the box so the user can tweak and send. nothing is sent automatically
+const promptDraft = ref("")
+const promptComposer = ref(null)
+const PROMPTS = [
+  { label: "Plan tonight's prep", text: "Walk me through the prep list for tonight's service, ordered by station.", icon: "lucide:clipboard-list" },
+  { label: "Cost a dish", text: "Break down the food cost for the duck course and flag anything above target.", icon: "lucide:calculator" },
+  { label: "What's low?", text: "Check the walk-in and tell me what's below par so I can build an order.", icon: "lucide:package-search" },
+  { label: "Draft a special", text: "Suggest a special using what's about to turn, with a rough plate cost.", icon: "lucide:sparkles" },
+]
+function insertPrompt(text) {
+  promptDraft.value = text
+  nextTick(() => promptComposer.value?.focus())
+}
 
 // streaming demo: grow a source string in irregular bursts, like real tokens
 const SAMPLE = "For tonight's service I'd run the duck in two passes so the second seating gets it freshly rested. Pull the first tray at 5:50, let it rest while the 7:30 eight-tops are seated, then fire the rest. That keeps every plate within a few minutes of resting time instead of holding a full tray under the lamp."
@@ -187,6 +203,21 @@ function streamReply(idx, full) {
         </ChatComposer>
         <p style="font-size: 13px; color: var(--ink-60); margin: 0;">
           Enter sends, Shift+Enter adds a newline. The textarea grows up to eight rows.
+        </p>
+      </div>
+    </Variant>
+
+    <!-- prompt menu in the actions slot: opens upward, fills the box on click -->
+    <Variant title="Composer with prompt menu">
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 560px;">
+        <ChatComposer ref="promptComposer" v-model="promptDraft" placeholder="Message Sous…">
+          <template #actions>
+            <PromptMenu :prompts="PROMPTS" @select="insertPrompt" />
+          </template>
+        </ChatComposer>
+        <p style="font-size: 13px; color: var(--ink-60); margin: 0;">
+          The button opens a menu of predefined prompts. Selecting one fills the composer
+          and focuses it - it does not send.
         </p>
       </div>
     </Variant>
