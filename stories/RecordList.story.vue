@@ -13,6 +13,7 @@ const makeDocs = () => [
 
 const docs = ref(makeDocs())
 const compactDocs = ref(makeDocs())
+const popoverDocs = ref(makeDocs())
 const opened = ref("")
 
 const makeSources = () => [
@@ -38,6 +39,7 @@ function removeFrom(listRef, value) {
 function reset() {
   docs.value = makeDocs()
   compactDocs.value = makeDocs()
+  popoverDocs.value = makeDocs()
   sources.value = makeSources()
   opened.value = ""
   viewed.value = ""
@@ -59,6 +61,24 @@ function reset() {
         </Card>
         <p style="font-size: 13px; color: var(--ink-60); margin: 12px 2px 0;">
           Opened: <code>{{ opened || "nothing yet" }}</code> ·
+          <button class="pc-reset" @click="reset">Reset list</button>
+        </p>
+      </div>
+    </Variant>
+
+    <!-- confirm inline with a popover instead of a centered modal -->
+    <Variant title="Popover confirm">
+      <div style="max-width: 600px;">
+        <Card style="overflow: hidden;">
+          <RecordList
+            :items="popoverDocs"
+            :actions="[DELETE]"
+            confirm-style="popover"
+            @action="({ item }) => removeFrom(popoverDocs, item.value)"
+          />
+        </Card>
+        <p style="font-size: 13px; color: var(--ink-60); margin: 12px 2px 0;">
+          Delete asks for confirmation in an inline popover. ·
           <button class="pc-reset" @click="reset">Reset list</button>
         </p>
       </div>

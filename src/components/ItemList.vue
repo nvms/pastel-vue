@@ -3,29 +3,64 @@ import { ref, computed } from "vue"
 import { Icon } from "@iconify/vue"
 import Button from "./Button.vue"
 import Modal from "./Modal.vue"
+import ConfirmPopover from "./ConfirmPopover.vue"
 
 const props = defineProps({
   // each item: { label, icon?, meta?, status?, value?, disabled? }
   // status is a string, or { label, tone } where tone is
   // neutral | positive | warning | negative | info
   items: { type: Array, default: () => [] },
-  // row actions revealed on hover: { name, icon, label?, variant?, confirm? }
-  // variant: default | danger. confirm: true | { title, message, confirmLabel, cancelLabel }
+  // row actions revealed on hover: { name, icon, label?, variant?, confirm?, show? }
+  // variant: default | danger. confirm: true | { title, message, confirmLabel, cancelLabel, placement }
+  // show is an optional (item) => boolean predicate that gates the action per row
   actions: { type: Array, default: () => [] },
+  // how a confirm action asks for confirmation: a centered modal, or an inline popover
+  confirmStyle: { type: String, default: "modal" }, // modal | popover
   // staggered entrance on mount
   animate: { type: Boolean, default: true },
   // tighter rows for dense lists
   compact: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(["action"])
+const emit = defineEmits(["select", "action"])
 
 const statusOf = (s) => (typeof s === "string" ? { label: s, tone: "neutral" } : { tone: "neutral", ...s })
 
 // cap the cascade so a long list still finishes quickly
 const delay = (i) => (props.animate ? `${Math.min(i, 12) * 40}ms` : "0ms")
 
-const pending = ref(null) // { action, item, index } awaiting confirmation
+const actionsFor = (item) => props.actions.filter((a) => !a.show || a.show(item))
+
+const keyOf = (item, index) => item.value ?? item.label ?? index
+
+const onSelect = (item, index) => {
+  if (item.disabled) return
+  emit("select", item, index)
+}
+
+// resolve an action's confirm config against an item. explicitTitle is "" unless
+// the consumer set one - the popover stays title-less, the modal falls back to a default
+const resolveConfirm = (action, item) => {
+  const c = typeof action.confirm === "object" ? action.confirm : {}
+  const verb = action.label || action.name
+  return {
+    explicitTitle: c.title ?? "",
+    defaultTitle: `${verb}?`,
+    message: c.message ?? `Are you sure you want to ${verb.toLowerCase()} "${item.label}"?`,
+    confirmLabel: c.confirmLabel ?? verb,
+    cancelLabel: c.cancelLabel ?? "Cancel",
+    placement: c.placement ?? "top-end",
+    danger: action.variant === "danger",
+  }
+}
+
+const emitAction = (action, item, index) => emit("action", { action: action.name, item, index })
+
+// the row whose inline confirm popover is open - kept revealed so the trigger and
+// its anchor stay put while the (teleported) popover is shown
+const openKey = ref(null)
+
+const pending = ref(null) // { action, item, index } awaiting modal confirmation
 
 const onAction = (action, item, index) => {
   if (item.disabled) return
@@ -43,16 +78,8 @@ const confirmOpen = computed({
 
 const confirmText = computed(() => {
   if (!pending.value) return null
-  const { action, item } = pending.value
-  const c = typeof action.confirm === "object" ? action.confirm : {}
-  const verb = action.label || action.name
-  return {
-    title: c.title ?? `${verb}?`,
-    message: c.message ?? `Are you sure you want to ${verb.toLowerCase()} "${item.label}"?`,
-    confirmLabel: c.confirmLabel ?? verb,
-    cancelLabel: c.cancelLabel ?? "Cancel",
-    danger: action.variant === "danger",
-  }
+  const r = resolveConfirm(pending.value.action, pending.value.item)
+  return { ...r, title: r.explicitTitle || r.defaultTitle }
 })
 
 const proceed = () => {
@@ -68,11 +95,19 @@ const proceed = () => {
     <div
       v-for="(item, i) in items"
       :key="item.value ?? item.label ?? i"
-      :class="['pc-itemlist__row', { 'pc-itemlist__row--disabled': item.disabled }]"
+      :class="['pc-itemlist__row', {
+        'pc-itemlist__row--disabled': item.disabled,
+        'pc-itemlist__row--actions-open': openKey === keyOf(item, i),
+      }]"
       :style="{ '--row-delay': delay(i) }"
     >
       <Icon v-if="item.icon" :icon="item.icon" class="pc-itemlist__icon" aria-hidden="true" />
-      <span class="pc-itemlist__label">{{ item.label }}</span>
+      <button
+        type="button"
+        class="pc-itemlist__label"
+        :disabled="item.disabled || undefined"
+        @click="onSelect(item, i)"
+      >{{ item.label }}</button>
 
       <div class="pc-itemlist__trail">
         <span v-if="item.meta" class="pc-itemlist__meta">{{ item.meta }}</span>
@@ -86,17 +121,39 @@ const proceed = () => {
           {{ statusOf(item.status).label }}
         </span>
 
-        <span v-if="actions.length && !item.disabled" class="pc-itemlist__actions-wrap">
+        <span v-if="actionsFor(item).length && !item.disabled" class="pc-itemlist__actions-wrap">
           <span class="pc-itemlist__actions">
-            <Button
-              v-for="action in actions"
-              :key="action.name"
-              :icon="action.icon"
-              :variant="action.variant === 'danger' ? 'danger' : 'ghost'"
-              size="sm"
-              :aria-label="action.label || action.name"
-              @click="onAction(action, item, i)"
-            />
+            <template v-for="action in actionsFor(item)" :key="action.name">
+              <ConfirmPopover
+                v-if="confirmStyle === 'popover' && action.confirm"
+                :title="resolveConfirm(action, item).explicitTitle"
+                :message="resolveConfirm(action, item).message"
+                :confirm-label="resolveConfirm(action, item).confirmLabel"
+                :cancel-label="resolveConfirm(action, item).cancelLabel"
+                :variant="action.variant === 'danger' ? 'danger' : 'primary'"
+                :placement="resolveConfirm(action, item).placement"
+                @open="openKey = keyOf(item, i)"
+                @close="openKey = null"
+                @confirm="emitAction(action, item, i)"
+              >
+                <template #trigger>
+                  <Button
+                    :icon="action.icon"
+                    :variant="action.variant === 'danger' ? 'danger' : 'ghost'"
+                    size="sm"
+                    :aria-label="action.label || action.name"
+                  />
+                </template>
+              </ConfirmPopover>
+              <Button
+                v-else
+                :icon="action.icon"
+                :variant="action.variant === 'danger' ? 'danger' : 'ghost'"
+                size="sm"
+                :aria-label="action.label || action.name"
+                @click="onAction(action, item, i)"
+              />
+            </template>
           </span>
         </span>
       </div>
@@ -139,14 +196,27 @@ const proceed = () => {
 .pc-itemlist__label {
   flex: 1;
   min-width: 0;
+  align-self: center;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  text-align: left;
   font-family: var(--display);
   font-size: 14px;
   letter-spacing: -0.14px;
   line-height: 1.4;
+  color: var(--ink);
+  cursor: pointer;
+  outline: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: color 120ms ease;
 }
+.pc-itemlist__label:hover { text-decoration: underline; }
+.pc-itemlist__label:focus-visible { text-decoration: underline; }
+.pc-itemlist__label:disabled { color: var(--ink-40); cursor: not-allowed; }
 .pc-itemlist--compact .pc-itemlist__label { font-size: 13px; }
 
 /* trailing zone stays right-aligned; the action area opens to the left of it on
@@ -206,12 +276,14 @@ const proceed = () => {
    squeezing their width down to zero and back */
 .pc-itemlist__actions > * { flex-shrink: 0; }
 .pc-itemlist__row:hover:not(.pc-itemlist__row--disabled) .pc-itemlist__actions-wrap,
-.pc-itemlist__row:focus-within .pc-itemlist__actions-wrap {
+.pc-itemlist__row:focus-within .pc-itemlist__actions-wrap,
+.pc-itemlist__row--actions-open .pc-itemlist__actions-wrap {
   grid-template-columns: 1fr;
   margin-left: 0;
 }
 .pc-itemlist__row:hover:not(.pc-itemlist__row--disabled) .pc-itemlist__actions,
-.pc-itemlist__row:focus-within .pc-itemlist__actions {
+.pc-itemlist__row:focus-within .pc-itemlist__actions,
+.pc-itemlist__row--actions-open .pc-itemlist__actions {
   opacity: 1;
   transform: translateX(0);
 }

@@ -44,6 +44,7 @@ export { default as Knob } from "./components/Knob.vue"
 // overlays
 export { default as Tooltip } from "./components/Tooltip.vue"
 export { default as Popover } from "./components/Popover.vue"
+export { default as ConfirmPopover } from "./components/ConfirmPopover.vue"
 export { default as Modal } from "./components/Modal.vue"
 export { default as Drawer } from "./components/Drawer.vue"
 export { default as DropdownMenu } from "./components/DropdownMenu.vue"

@@ -52,15 +52,11 @@ const tok = (code) => tokenizeCode(code, "json") || [{ text: code, type: null }]
 // highlight an object/array as pretty json, or a primitive as its json literal
 const jsonTokens = (v) => tok(isComplex(v) ? fmt(v) : JSON.stringify(v))
 
-// named-argument rows when input is a plain object; otherwise a single raw block
-const inputEntries = computed(() =>
-  props.input && typeof props.input === "object" && !Array.isArray(props.input)
-    ? Object.entries(props.input)
-    : null,
-)
-const hasInput = computed(() => props.input !== null && props.input !== "" && !(
-  inputEntries.value && inputEntries.value.length === 0
-))
+const isEmptyObj = (v) => isComplex(v) && Object.keys(v).length === 0
+const hasInput = computed(() => {
+  const v = props.input
+  return v !== null && v !== undefined && v !== "" && !isEmptyObj(v)
+})
 const hasOutput = computed(() => props.output !== undefined && props.output !== null)
 
 const fmtDuration = (ms) =>
@@ -99,14 +95,9 @@ const fmtDuration = (ms) =>
         <div class="pc-tool__inner">
           <section v-if="hasInput" class="pc-tool__section">
             <div class="pc-tool__label">Input</div>
-            <div v-if="inputEntries" class="pc-tool__args">
-              <div v-for="[key, val] in inputEntries" :key="key" class="pc-tool__arg" :class="{ 'pc-tool__arg--stacked': isComplex(val) }">
-                <span class="pc-tool__arg-key">{{ key }}</span>
-                <pre v-if="isComplex(val)" class="pc-tool__code pc-syntax"><span v-for="(t, i) in tok(fmt(val))" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
-                <span v-else class="pc-tool__arg-val pc-syntax"><span v-for="(t, i) in jsonTokens(val)" :key="i" :class="['token', t.type]">{{ t.text }}</span></span>
-              </div>
-            </div>
-            <pre v-else class="pc-tool__code pc-syntax"><span v-for="(t, i) in jsonTokens(input)" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
+            <pre v-if="isComplex(input)" class="pc-tool__code pc-syntax"><span v-for="(t, i) in tok(fmt(input))" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
+            <div v-else-if="typeof input === 'string'" class="pc-tool__text">{{ input }}</div>
+            <span v-else class="pc-tool__arg-val pc-syntax"><span v-for="(t, i) in jsonTokens(input)" :key="i" :class="['token', t.type]">{{ t.text }}</span></span>
           </section>
 
           <section v-if="hasOutput" class="pc-tool__section">
@@ -153,9 +144,9 @@ const fmtDuration = (ms) =>
 .pc-tool__head {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 7px 10px;
   background: transparent;
   border: 0;
   font: inherit;
@@ -171,12 +162,12 @@ const fmtDuration = (ms) =>
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
   background: var(--ink-04);
   color: var(--ink-60);
-  font-size: 14px;
+  font-size: 13px;
 }
 .pc-tool--err .pc-tool__icon { background: var(--status-failed-bg); color: var(--status-failed); }
 
@@ -236,13 +227,13 @@ const fmtDuration = (ms) =>
 .pc-tool__inner {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  /* header already carries 10px bottom padding; 2px here makes a balanced 12px
-     gap above the first label, matching the 12px sides and bottom */
-  padding: 2px 12px 12px;
+  gap: 12px;
+  /* the header already carries its bottom padding; a hair here balances the gap
+     above the first label against the 10px sides and bottom */
+  padding: 2px 10px 10px;
 }
 
-.pc-tool__section { display: flex; flex-direction: column; gap: 6px; }
+.pc-tool__section { display: flex; flex-direction: column; gap: 5px; }
 .pc-tool__label {
   font-family: var(--mono);
   font-size: 10px;
@@ -251,30 +242,27 @@ const fmtDuration = (ms) =>
   color: var(--ink-40);
 }
 
-.pc-tool__args { display: flex; flex-direction: column; gap: 7px; }
-.pc-tool__arg {
-  display: flex;
-  gap: 12px;
+/* inline primitive value (non-object input/output) */
+.pc-tool__arg-val {
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.5;
+  color: var(--ink);
+  overflow-wrap: anywhere;
 }
-.pc-tool__arg--stacked { flex-direction: column; gap: 5px; }
-.pc-tool__arg-key { color: var(--ink-40); flex-shrink: 0; }
-.pc-tool__arg-val { color: var(--ink); overflow-wrap: anywhere; }
 
 .pc-tool__code {
   margin: 0;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-radius: var(--radius-sharp);
   background: var(--ink-04);
   color: var(--ink);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.5;
   white-space: pre;
   overflow: auto;
-  max-height: 280px;
+  max-height: 260px;
   scrollbar-width: thin;
   scrollbar-color: var(--ink-20) transparent;
 }
@@ -283,7 +271,7 @@ const fmtDuration = (ms) =>
 
 /* free-text (prose) output wraps and stays unhighlighted */
 .pc-tool__text {
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 1.55;
   color: var(--ink);
   white-space: pre-wrap;

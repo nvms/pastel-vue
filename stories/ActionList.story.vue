@@ -25,6 +25,20 @@ const STATIONS = [
 ]
 
 const selected = ref("")
+
+const makeSteps = () => [
+  { label: "Score the duck skin in a tight crosshatch", value: "s1" },
+  { label: "Render the fat low and slow before flipping", value: "s2" },
+  { label: "Bring proteins to room temperature first", value: "s3" },
+  { label: "Deglaze the pan and reduce for the sauce", value: "s4" },
+  { label: "Rest the breast for half its cooking time", value: "s5" },
+]
+const editableSteps = ref(makeSteps())
+const DELETE = { name: "delete", icon: "lucide:trash-2", label: "Delete", variant: "danger", confirm: { message: "Remove this step from the method?" } }
+
+function removeStep({ item }) {
+  editableSteps.value = editableSteps.value.filter((s) => s.value !== item.value)
+}
 </script>
 
 <template>
@@ -63,6 +77,25 @@ const selected = ref("")
         <Card style="overflow: hidden;">
           <ActionList :items="STEPS" />
         </Card>
+      </div>
+    </Variant>
+
+    <!-- a delete action appears left of the chevron on hover; click pops a confirm -->
+    <Variant title="With delete action">
+      <div style="max-width: 560px;">
+        <Card style="overflow: hidden;">
+          <ActionList
+            :items="editableSteps"
+            :actions="[DELETE]"
+            confirm-style="popover"
+            @select="selected = $event.label"
+            @action="removeStep"
+          />
+        </Card>
+        <p style="font-size: 13px; color: var(--ink-60); margin: 12px 2px 0;">
+          Hover a row: a delete button slides in left of the arrow. Clicking it opens an inline
+          confirm popover. The row itself stays clickable.
+        </p>
       </div>
     </Variant>
 

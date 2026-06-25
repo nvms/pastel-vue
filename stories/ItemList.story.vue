@@ -14,6 +14,7 @@ const makeFiles = () => [
 const files = ref(makeFiles())
 const multiFiles = ref(makeFiles())
 const compactFiles = ref(makeFiles())
+const popoverFiles = ref(makeFiles())
 const log = ref("")
 
 const DELETE = { name: "delete", icon: "lucide:trash-2", label: "Delete", variant: "danger", confirm: true }
@@ -37,6 +38,7 @@ function reset() {
   files.value = makeFiles()
   multiFiles.value = makeFiles()
   compactFiles.value = makeFiles()
+  popoverFiles.value = makeFiles()
   log.value = ""
 }
 </script>
@@ -72,6 +74,24 @@ function reset() {
         </Card>
         <p style="font-size: 13px; color: var(--ink-60); margin: 12px 2px 0;">
           Last action: <code>{{ log || "none" }}</code> ·
+          <button class="pc-reset" @click="reset">Reset list</button>
+        </p>
+      </div>
+    </Variant>
+
+    <!-- confirm inline with a popover instead of a centered modal -->
+    <Variant title="Popover confirm">
+      <div style="max-width: 560px;">
+        <Card style="overflow: hidden;">
+          <ItemList
+            :items="popoverFiles"
+            :actions="[DELETE]"
+            confirm-style="popover"
+            @action="onDelete(popoverFiles)"
+          />
+        </Card>
+        <p style="font-size: 13px; color: var(--ink-60); margin: 12px 2px 0;">
+          Clicking delete opens an inline confirm popover anchored to the button. ·
           <button class="pc-reset" @click="reset">Reset list</button>
         </p>
       </div>
