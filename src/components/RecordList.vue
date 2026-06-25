@@ -33,6 +33,14 @@ const descOf = (d) => (typeof d === "string" ? { text: d } : d || {})
 const relFor = (target) => (target === "_blank" ? "noopener noreferrer" : undefined)
 
 const actionsFor = (item) => props.actions.filter((a) => !a.show || a.show(item))
+const hasActions = (item) => actionsFor(item).length > 0 && !item.disabled
+
+// width the reveal opens to, so the absolutely-positioned buttons fade into space
+// that exactly fits them. sm icon buttons are control-h-sm (28px) with a 2px gap
+const actionsWidth = (item) => {
+  const n = actionsFor(item).length
+  return n ? `${n * 28 + (n - 1) * 2}px` : "0px"
+}
 
 const keyOf = (item, index) => item.value ?? item.label ?? index
 
@@ -105,7 +113,7 @@ const proceed = () => {
         'pc-recordlist__row--disabled': item.disabled,
         'pc-recordlist__row--actions-open': openKey === keyOf(item, i),
       }]"
-      :style="{ '--row-delay': delay(i) }"
+      :style="{ '--row-delay': delay(i), '--actions-w': actionsWidth(item) }"
     >
       <Icon v-if="item.icon" :icon="item.icon" class="pc-recordlist__icon" aria-hidden="true" />
 
@@ -153,7 +161,8 @@ const proceed = () => {
           {{ statusOf(item.status).label }}
         </span>
 
-        <span v-if="actionsFor(item).length && !item.disabled" class="pc-recordlist__actions-wrap">
+        <template v-if="hasActions(item)">
+          <span class="pc-recordlist__spacer" aria-hidden="true"></span>
           <span class="pc-recordlist__actions">
             <template v-for="action in actionsFor(item)" :key="action.name">
               <ConfirmPopover
@@ -187,7 +196,7 @@ const proceed = () => {
               />
             </template>
           </span>
-        </span>
+        </template>
       </div>
     </div>
 
@@ -274,9 +283,10 @@ const proceed = () => {
 .pc-recordlist__desc-link:hover { text-decoration: underline; }
 .pc-recordlist__desc-link:focus-visible { text-decoration: underline; outline: none; }
 
-/* trailing zone stays right-aligned; the action area opens to the left of it on
-   hover, so the metadata eases over but never disappears and the name never moves */
-.pc-recordlist__trail { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+/* trailing zone stays right-aligned; on hover an empty spacer widens (easing the
+   metadata left) while the buttons fade in over it - the buttons are absolutely
+   positioned so they are never clipped, so the open and the fade run together smoothly */
+.pc-recordlist__trail { position: relative; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
 
 .pc-recordlist__meta {
   font-family: var(--mono);
@@ -308,34 +318,39 @@ const proceed = () => {
 .pc-recordlist__status--negative .pc-recordlist__dot { background: var(--status-failed); }
 .pc-recordlist__status--info .pc-recordlist__dot { background: var(--status-paused); }
 
-.pc-recordlist__actions-wrap {
-  display: grid;
-  grid-template-columns: 0fr;
-  transition: grid-template-columns 240ms cubic-bezier(0.16, 1, 0.3, 1),
-              margin-left 240ms cubic-bezier(0.16, 1, 0.3, 1);
+/* empty spacer that widens to open room for the buttons; the negative margin
+   cancels the trail gap while collapsed so the metadata sits flush at rest */
+.pc-recordlist__spacer {
+  width: 0;
+  flex-shrink: 0;
+  transition: width 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              margin-left 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.pc-recordlist__actions-wrap:not(:first-child) { margin-left: -14px; }
+.pc-recordlist__spacer:not(:first-child) { margin-left: -14px; }
 .pc-recordlist__actions {
-  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   gap: 2px;
   opacity: 0;
-  transform: translateX(8px);
-  transition: opacity 160ms ease, transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  transition: opacity 200ms ease;
 }
 .pc-recordlist__actions > * { flex-shrink: 0; }
-.pc-recordlist__row:hover:not(.pc-recordlist__row--disabled) .pc-recordlist__actions-wrap,
-.pc-recordlist__row:focus-within .pc-recordlist__actions-wrap,
-.pc-recordlist__row--actions-open .pc-recordlist__actions-wrap {
-  grid-template-columns: 1fr;
+.pc-recordlist__row:hover:not(.pc-recordlist__row--disabled) .pc-recordlist__spacer,
+.pc-recordlist__row:focus-within .pc-recordlist__spacer,
+.pc-recordlist__row--actions-open .pc-recordlist__spacer {
+  width: var(--actions-w, 0px);
   margin-left: 0;
 }
 .pc-recordlist__row:hover:not(.pc-recordlist__row--disabled) .pc-recordlist__actions,
 .pc-recordlist__row:focus-within .pc-recordlist__actions,
 .pc-recordlist__row--actions-open .pc-recordlist__actions {
   opacity: 1;
-  transform: translateX(0);
+  pointer-events: auto;
 }
 
 .pc-recordlist__confirm-msg { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-60); }
@@ -351,7 +366,7 @@ const proceed = () => {
 
 @media (prefers-reduced-motion: reduce) {
   .pc-recordlist--animate .pc-recordlist__row { animation: none; }
-  .pc-recordlist__actions-wrap { transition: none; }
-  .pc-recordlist__actions { transition: opacity 150ms ease; transform: none; }
+  .pc-recordlist__spacer { transition: none; }
+  .pc-recordlist__actions { transition: opacity 120ms ease; }
 }
 </style>

@@ -226,39 +226,30 @@ const delay = (i) => (props.animate ? `${Math.min(i, 12) * 40}ms` : "0ms")
 }
 .pc-actionlist--compact .pc-actionlist__subtitle { font-size: 12px; }
 
-/* actions sit above the stretched ::after so they stay clickable; the collapsed
-   grid track opens on hover, and the chevron holds its place because the main
-   target is flex:1 and absorbs the width change */
+/* actions sit above the stretched ::after so they stay clickable. their slot is
+   always reserved in the row's empty trailing space (main is flex:1), so the
+   reveal is a pure opacity + scale fade - no layout animation, no clipping, and
+   nothing slides against the chevron */
 .pc-actionlist__actions-wrap {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 0fr;
-  transition: grid-template-columns 240ms cubic-bezier(0.16, 1, 0.3, 1),
-              margin-left 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
 }
-.pc-actionlist__actions-wrap:not(:first-child) { margin-left: -12px; }
 .pc-actionlist__actions {
-  overflow: hidden;
   display: flex;
   align-items: center;
   gap: 2px;
   opacity: 0;
-  transform: translateX(8px);
-  transition: opacity 160ms ease, transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  transition: opacity 140ms ease;
 }
 .pc-actionlist__actions > * { flex-shrink: 0; }
-.pc-actionlist__item:hover:not(.pc-actionlist__item--disabled) .pc-actionlist__actions-wrap,
-.pc-actionlist__item:focus-within .pc-actionlist__actions-wrap,
-.pc-actionlist__item--actions-open .pc-actionlist__actions-wrap {
-  grid-template-columns: 1fr;
-  margin-left: 0;
-}
 .pc-actionlist__item:hover:not(.pc-actionlist__item--disabled) .pc-actionlist__actions,
 .pc-actionlist__item:focus-within .pc-actionlist__actions,
 .pc-actionlist__item--actions-open .pc-actionlist__actions {
   opacity: 1;
-  transform: translateX(0);
+  pointer-events: auto;
 }
 
 /* the chevron is decorative and sits under the stretched target; only it moves on hover */
@@ -286,8 +277,7 @@ const delay = (i) => (props.animate ? `${Math.min(i, 12) * 40}ms` : "0ms")
 
 @media (prefers-reduced-motion: reduce) {
   .pc-actionlist--animate .pc-actionlist__item { animation: none; }
-  .pc-actionlist__actions-wrap { transition: none; }
-  .pc-actionlist__actions { transition: opacity 150ms ease; transform: none; }
+  .pc-actionlist__actions { transition: opacity 120ms ease; }
   .pc-actionlist__chevron { transition: color 140ms ease; }
   .pc-actionlist__item:hover:not(.pc-actionlist__item--disabled) .pc-actionlist__chevron { transform: none; }
 }
