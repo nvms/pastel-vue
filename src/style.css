@@ -338,3 +338,10 @@ p { margin: 0; }
 .pc-syntax .token.namespace { opacity: 0.6; }
 .pc-syntax .token.bold { font-weight: 600; }
 .pc-syntax .token.italic { font-style: italic; }
+
+/* markdown */
+.pc-syntax .token.title { color: var(--status-paused); font-weight: 600; }
+.pc-syntax .token.code-snippet { color: var(--status-active); }
+.pc-syntax .token.url { color: var(--pc-syn-func); }
+.pc-syntax .token.list { color: var(--status-paused); }
+.pc-syntax .token.blockquote { color: var(--ink-40); font-style: italic; }

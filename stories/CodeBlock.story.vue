@@ -37,6 +37,26 @@ const json = `{
   }
 }`
 
+const md = `# Pan-Seared Duck Breast
+
+Serves **two**. Total time: *about 30 minutes*.
+
+## Ingredients
+
+- 2 duck breasts, skin on
+- Flaky salt and black pepper
+- 1 sprig thyme
+
+## Method
+
+1. Score the skin in a tight crosshatch, then season.
+2. Lay the breasts in a *cold* pan and render skin-side down.
+3. Flip, baste with thyme, and pull at \`52C\` internal.
+
+> Rest for half the cooking time before slicing.
+
+See the [stock guide](https://example.com) for the pan sauce.`
+
 const long = Array.from({ length: 40 }, (_, i) =>
   `const item${i + 1} = registry.resolve("item-${i + 1}")`
 ).join("\n")
@@ -55,6 +75,12 @@ const long = Array.from({ length: 40 }, (_, i) =>
         <CodeBlock :code="py" language="python" filename="dates.py" />
         <CodeBlock :code="css" language="css" filename="card.css" />
         <CodeBlock :code="json" language="json" filename="package.json" />
+      </div>
+    </Variant>
+
+    <Variant title="Markdown">
+      <div style="max-width: 620px;">
+        <CodeBlock :code="md" language="markdown" filename="duck-breast.md" />
       </div>
     </Variant>
 

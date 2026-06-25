@@ -41,7 +41,9 @@ const flatten = (nodes, type, out) => {
     if (typeof node === "string") {
       if (node.length) out.push({ text: node, type })
     } else {
-      const t = node.type || type
+      // markdown wraps emphasized text in a generic "content" child - keep the
+      // meaningful enclosing scope (bold, italic, url, title) instead of descending past it
+      const t = node.type && node.type !== "content" ? node.type : type
       const content = node.content
       if (typeof content === "string") {
         if (content.length) out.push({ text: content, type: t })
