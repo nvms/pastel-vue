@@ -68,7 +68,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .pc-drawer-root {
   position: fixed; inset: 0;
-  z-index: 9500;
+  z-index: var(--z-modal);
   display: flex;
 }
 .pc-drawer-root--right  { justify-content: flex-end; }

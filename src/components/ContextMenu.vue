@@ -105,7 +105,7 @@ const keysOf = (s) => Array.isArray(s) ? s : (s == null ? [] : [s])
 <style>
 /* unscoped since reka teleports to body and our styles must reach the portal */
 .pc-ctxmenu {
-  z-index: 9000;
+  z-index: var(--z-popover);
   background: var(--paper);
   border: 1px solid var(--ink-08);
   border-radius: var(--radius-comfy);

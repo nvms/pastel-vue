@@ -198,7 +198,7 @@ const filtered = computed(() => {
 <style>
 /* unscoped because the content is portaled */
 .pc-combobox__content {
-  z-index: 8000;
+  z-index: var(--z-popover);
   background: var(--paper);
   border: 1px solid var(--ink-08);
   border-radius: var(--radius-comfy);

@@ -326,7 +326,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", onKeydown))
 /* source popover */
 .pc-cited__pop {
   position: absolute;
-  z-index: 9000;
+  z-index: var(--z-overlay);
   width: 280px;
   background: var(--paper);
   border: 1px solid var(--ink-08);

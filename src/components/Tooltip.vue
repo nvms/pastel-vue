@@ -83,7 +83,7 @@ const arrowStyle = computed(() => {
   position: absolute;
   /* above drawer and modal overlays (9500) since a tooltip can be triggered from
      inside one, but below toasts (10000) */
-  z-index: 9800;
+  z-index: var(--z-tooltip);
   background: var(--midnight);
   color: var(--paper-on-dark);
   font-size: 12px;

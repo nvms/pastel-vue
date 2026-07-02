@@ -214,7 +214,7 @@ const keysOf = (s) => Array.isArray(s) ? s : (s == null ? [] : [s])
 
 /* dropdown - mirrors ContextMenu */
 .pc-mb-menu {
-  z-index: 9000;
+  z-index: var(--z-overlay);
   background: var(--paper);
   border: 1px solid var(--ink-08);
   border-radius: var(--radius-comfy);

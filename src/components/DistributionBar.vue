@@ -164,7 +164,7 @@ const onSegLeave = () => {
 /* hover tooltip */
 .pc-distbar__tip {
   position: absolute;
-  z-index: 9000;
+  z-index: var(--z-overlay);
   display: flex;
   flex-direction: column;
   gap: 2px;

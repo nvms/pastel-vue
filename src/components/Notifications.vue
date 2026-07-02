@@ -98,7 +98,7 @@ const variantLabel = (v) => ({
 <style scoped>
 .pc-notifications {
   position: fixed;
-  z-index: 10000;
+  z-index: var(--z-toast);
   display: flex;
   pointer-events: none;
   padding: 20px;

@@ -327,7 +327,7 @@ onBeforeUnmount(() => {
 /* selection toolbar */
 .pc-redactor__toolbar {
   position: fixed;
-  z-index: 9000;
+  z-index: var(--z-overlay);
   transform: translate(-50%, calc(-100% - 8px));
   background: var(--midnight);
   border-radius: var(--radius-comfy);
@@ -367,7 +367,7 @@ onBeforeUnmount(() => {
 /* redaction menu */
 .pc-redactor__menu {
   position: absolute;
-  z-index: 9000;
+  z-index: var(--z-overlay);
   min-width: 184px;
   background: var(--paper);
   border: 1px solid var(--ink-08);

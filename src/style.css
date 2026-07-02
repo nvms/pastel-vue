@@ -44,6 +44,14 @@
   --focus-ring-on-dark: 0 0 0 3px rgba(255, 255, 255, 0.30);
   --focus-ring-danger: 0 0 0 3px rgba(179, 38, 30, 0.25);
 
+  /* layering - trigger-anchored overlays sit above modals so a dropdown opened
+     from inside a modal is not trapped behind it */
+  --z-overlay: 9000;   /* inline / data-viz hover overlays */
+  --z-modal: 9500;     /* modal and drawer surfaces */
+  --z-popover: 9700;   /* menus, dropdowns, popovers, comboboxes, date pickers */
+  --z-tooltip: 9800;
+  --z-toast: 10000;
+
   /* geometry */
   --radius-sharp: 4px;
   --radius-comfy: 8px;

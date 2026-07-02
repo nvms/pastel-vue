@@ -404,7 +404,7 @@ onBeforeUnmount(() => {
    the animation uses `translate` so it never clobbers floating-ui's transform */
 .pc-annotator__pop {
   position: absolute;
-  z-index: 9000;
+  z-index: var(--z-overlay);
   opacity: 0;
   visibility: hidden;
 }

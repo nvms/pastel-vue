@@ -285,7 +285,7 @@ const onCellLeave = () => {
 /* shared hover tooltip */
 .pc-heatmap__tip {
   position: absolute;
-  z-index: 9000;
+  z-index: var(--z-overlay);
   display: flex;
   flex-direction: column;
   gap: 1px;

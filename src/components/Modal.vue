@@ -57,7 +57,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .pc-modal-root {
   position: fixed; inset: 0;
-  z-index: 9500;
+  z-index: var(--z-modal);
   display: flex; align-items: center; justify-content: center;
   padding: 20px;
 }

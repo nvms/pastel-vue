@@ -93,7 +93,7 @@ const onSelect = (item) => {
 
 .pc-promptmenu {
   position: absolute;
-  z-index: 8500;
+  z-index: var(--z-popover);
   background: var(--paper);
   border: 1px solid var(--ink-08);
   border-radius: var(--radius-comfy);
