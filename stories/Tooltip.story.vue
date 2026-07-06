@@ -14,12 +14,17 @@ import Button from "../src/components/Button.vue"
       </div>
     </Variant>
     <Variant title="Long content">
-      <Tooltip placement="top">
-        <Button>Hover</Button>
-        <template #content>
-          Hover-only tooltip that stays out of the way.
-        </template>
-      </Tooltip>
+      <div style="padding: 140px 80px;">
+        <Tooltip placement="top">
+          <Button>Hover</Button>
+          <template #content>
+            Resting the dough overnight in the fridge slows fermentation, which deepens
+            the flavor and makes the crumb more open. If you are short on time, two hours
+            at room temperature works, but the crust will brown faster than you expect,
+            so keep an eye on it after the first fifteen minutes.
+          </template>
+        </Tooltip>
+      </div>
     </Variant>
   </Story>
 </template>

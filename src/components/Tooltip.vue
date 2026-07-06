@@ -90,7 +90,10 @@ const arrowStyle = computed(() => {
   padding: 4px 8px;
   border-radius: var(--radius-sharp);
   pointer-events: none;
-  white-space: nowrap;
+  width: max-content;
+  max-width: 280px;
+  overflow-wrap: break-word;
+  line-height: 1.5;
   letter-spacing: -0.12px;
   font-family: var(--display);
   box-shadow: var(--shadow-soft);
