@@ -7,10 +7,14 @@ import Textarea from "../src/components/Textarea.vue"
 import Field from "../src/components/Field.vue"
 import KeyValue from "../src/components/KeyValue.vue"
 import Badge from "../src/components/Badge.vue"
+import Combobox from "../src/components/Combobox.vue"
 
 const right = ref(false)
 const left = ref(false)
 const bottom = ref(false)
+const nested = ref(false)
+const cuisine = ref(null)
+const cuisines = ["Provencal", "Sichuan", "Oaxacan", "Levantine", "Basque", "Keralan"]
 </script>
 
 <template>
@@ -51,6 +55,19 @@ const bottom = ref(false)
         <template #footer="{ close }">
           <Button variant="outline" @click="close">Clear</Button>
           <Button variant="primary" @click="close">Apply</Button>
+        </template>
+      </Drawer>
+    </Variant>
+
+    <Variant title="With popover content">
+      <Button @click="nested = true">Tag a cuisine</Button>
+      <Drawer v-model="nested" side="right" size="sm" title="Tag a cuisine">
+        <Field label="Cuisine">
+          <Combobox v-model="cuisine" :options="cuisines" placeholder="Pick a cuisine..." />
+        </Field>
+        <template #footer="{ close }">
+          <Button variant="outline" @click="close">Cancel</Button>
+          <Button variant="primary" @click="close">Save</Button>
         </template>
       </Drawer>
     </Variant>
