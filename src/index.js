@@ -103,6 +103,7 @@ export { default as ChatComposer } from "./components/ChatComposer.vue"
 export { default as PromptMenu } from "./components/PromptMenu.vue"
 export { default as TypingIndicator } from "./components/TypingIndicator.vue"
 export { default as ToolCall } from "./components/ToolCall.vue"
+export { default as ToolApproval } from "./components/ToolApproval.vue"
 
 // evaluation suites
 export { default as EvalSuite } from "./components/EvalSuite.vue"
