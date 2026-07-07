@@ -51,6 +51,54 @@ function insertPrompt(text) {
   nextTick(() => promptComposer.value?.focus())
 }
 
+// an agent status report with the structure LLM output actually has: bold
+// section labels, inline-code state names, a numbered list of findings
+const AUDIT = `Audit complete.
+
+**Station state:** The brioche is in a proofing hold (\`proof_wait_overnight\`) that ends in 10 hours. This state is incorrect. The baker reported a warm proof, which should have started a 2-hour clock, not a 10-hour clock.
+
+**Documents:** A two-hour proof card is on file. It appears correct.
+
+**History and findings:** The batch history shows a series of errors, all originating with me.
+
+1. I repeatedly misread the station state, telling the baker the dough was waiting on *shape and pan* when it was actually waiting on the *warm proof*.
+2. The baker correctly reported the warm proof multiple times.
+3. When I finally advanced the batch, I selected the wrong transition, or the system routed it incorrectly. The batch entered an overnight cold-proof hold, contrary to the warm proof that was reported.
+
+This combination of my own error and an incorrect state transition requires human intervention. The batch is on the wrong path and I cannot correct it myself.`
+
+const NOTES = `## Duck course, second seating
+
+Par levels to update before service:
+
+\`\`\`json
+{ "cream": 6, "shallots": 4, "lemons": 12 }
+\`\`\`
+
+| Station | Fire | Rest |
+| --- | --- | --- |
+| Grill | 5:50 | 12 min |
+| Grill | 7:45 | 12 min |
+
+> Hold the second tray until the eight-tops are seated.
+
+Full timing lives on [the prep board](https://example.com/prep).`
+
+// streaming markdown: the same audit text growing in bursts, re-rendered as
+// markdown each tick
+const mdStream = ref("")
+let mdTimer = null
+function streamMarkdown() {
+  if (mdTimer) clearInterval(mdTimer)
+  mdStream.value = ""
+  let i = 0
+  mdTimer = setInterval(() => {
+    i += 4 + Math.floor((i % 11) / 3)
+    mdStream.value = AUDIT.slice(0, i)
+    if (i >= AUDIT.length) { clearInterval(mdTimer); mdTimer = null }
+  }, 24)
+}
+
 // streaming demo: grow a source string in irregular bursts, like real tokens
 const SAMPLE = "For tonight's service I'd run the duck in two passes so the second seating gets it freshly rested. Pull the first tray at 5:50, let it rest while the 7:30 eight-tops are seated, then fire the rest. That keeps every plate within a few minutes of resting time instead of holding a full tray under the lamp."
 const streamText = ref("")
@@ -124,6 +172,28 @@ function streamReply(idx, full) {
           </ol>
         </ChatMessage>
       </ChatThread>
+    </Variant>
+
+    <!-- the markdown prop: model output renders as formatted markdown -->
+    <Variant title="Markdown">
+      <ChatThread style="max-width: 640px;">
+        <ChatMessage role="user" name="You" text="Audit the brioche batch and give me its current state." />
+        <ChatMessage role="assistant" name="Sous" markdown :text="AUDIT" />
+        <ChatMessage role="user" name="You" markdown text="Thanks. Post the **final** timing when you have it - and keep `proof_wait_overnight` out of it this time." />
+        <ChatMessage role="assistant" name="Sous" markdown :text="NOTES" />
+      </ChatThread>
+    </Variant>
+
+    <!-- streaming + markdown: the growing text re-renders as markdown each tick -->
+    <Variant title="Streaming markdown">
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 640px;">
+        <Button variant="outline" size="sm" style="align-self: flex-start;" @click="streamMarkdown">
+          Stream the audit
+        </Button>
+        <ChatThread>
+          <ChatMessage v-if="mdStream" role="assistant" name="Sous" :text="mdStream" streaming markdown />
+        </ChatThread>
+      </div>
     </Variant>
 
     <!-- the point: custom components interleave between messages -->

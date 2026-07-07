@@ -55,6 +55,7 @@
     "@internationalized/date": "^3.12.1",
     "diff": "^9.0.0",
     "gpt-tokenizer": "^3.4.0",
+    "markdown-it": "^14.3.0",
     "prismjs": "^1.30.0",
     "reka-ui": "^2.9.7"
   },

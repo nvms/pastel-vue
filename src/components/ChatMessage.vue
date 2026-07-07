@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, toRef, useSlots, watch, onUnmounted } from "vue"
 import Avatar from "./Avatar.vue"
+import Markdown from "./Markdown.vue"
 import { useSmoothStream, smoothstep, clamp } from "../composables/useSmoothStream.js"
 
 const props = defineProps({
@@ -9,8 +10,13 @@ const props = defineProps({
   // avatar image src; initials fall back to name when omitted
   avatar: { type: String, default: "" },
   timestamp: { type: String, default: "" },
-  // plain-text content; the default slot wins when provided (markdown, CodeBlock, etc)
+  // text content; the default slot wins when provided (custom markup, CodeBlock, etc)
   text: { type: String, default: "" },
+  // render `text` as markdown. raw HTML in the text stays escaped, so model
+  // output is safe to pass straight through. when combined with `streaming`,
+  // the growing text re-renders as markdown each tick instead of using the
+  // character-level fade reveal
+  markdown: { type: Boolean, default: false },
   showAvatar: { type: Boolean, default: true },
   // show the name label above the bubble (the avatar still uses name for initials)
   showName: { type: Boolean, default: true },
@@ -147,7 +153,12 @@ onUnmounted(() => { if (ro) ro.disconnect() })
         :class="{ 'pc-msg__bubble--stream': streamed }"
         :style="streamed ? { height: streamHeight || undefined } : undefined"
       >
-        <div v-if="streamed" ref="streamInnerRef" class="pc-msg__stream"
+        <div
+          v-if="streamed && markdown"
+          ref="streamInnerRef"
+          class="pc-msg__stream pc-msg__stream--md"
+        ><Markdown :source="displayed" /></div>
+        <div v-else-if="streamed" ref="streamInnerRef" class="pc-msg__stream"
           ><span>{{ fade.head }}</span
           ><span
             v-for="(c, i) in fade.tail"
@@ -157,7 +168,10 @@ onUnmounted(() => { if (ro) ro.disconnect() })
             >{{ c.ch }}</span
           ><span v-if="isTypewriter" class="pc-msg__cursor" aria-hidden="true"
         /></div>
-        <slot v-else>{{ text }}</slot>
+        <slot v-else>
+          <Markdown v-if="markdown" :source="text" />
+          <template v-else>{{ text }}</template>
+        </slot>
       </div>
     </div>
   </div>
@@ -247,6 +261,8 @@ onUnmounted(() => { if (ro) ro.disconnect() })
   padding: 10px 12px;
   white-space: pre-wrap;
 }
+/* markdown streams render block markup, so normal whitespace handling applies */
+.pc-msg__stream--md { white-space: normal; }
 .pc-msg__char { will-change: opacity, filter, transform; }
 
 @media (prefers-reduced-motion: reduce) {
