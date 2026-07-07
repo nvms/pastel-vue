@@ -27,6 +27,8 @@ jobs:
       - run: npm run build
         env:
           HISTOIRE_BASE: /pastel-vue/
+      # the showcase is an SPA - serve index.html for deep links like /story/<id>
+      - run: cp .histoire/dist/index.html .histoire/dist/404.html
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:

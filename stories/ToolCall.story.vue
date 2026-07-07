@@ -1,5 +1,9 @@
 <script setup>
+import { ref, markRaw } from "vue"
 import ToolCall from "../src/components/ToolCall.vue"
+import ItemList from "../src/components/ItemList.vue"
+import Card from "../src/components/Card.vue"
+import Button from "../src/components/Button.vue"
 
 // 100 collapsed calls, each carrying a large JSON payload - a transcript from an
 // agent that has been running for a while. collapsed cards must stay cheap no
@@ -20,12 +24,28 @@ const makeBigPayload = (seed) => ({
   })),
   tookMs: 120 + (seed % 400),
 })
-const manyCalls = Array.from({ length: 100 }, (_, i) => ({
+// markRaw keeps histoire's deep state watcher (and any consumer-side deep
+// reactivity) from walking these huge payload graphs on every update
+const manyCalls = markRaw(Array.from({ length: 100 }, (_, i) => ({
   name: `kitchen.plan_${STATIONS[i % 6].replace(/-/g, "_")}`,
   input: { station: STATIONS[i % 6], date: "today", depth: "full" },
   output: makeBigPayload(i),
   durationMs: 180 + (i % 900),
-}))
+})))
+
+// the production shape: a long transcript of heavy collapsed tool calls with
+// animated item lists interleaved. the list entrance animations must stay
+// smooth no matter how much collapsed payload surrounds them
+const makeListItems = (seed) =>
+  Array.from({ length: 6 }, (_, i) => ({
+    label: `${STATIONS[(seed + i) % 6]} batch ${i + 1}`,
+    icon: "lucide:chef-hat",
+    meta: `${((seed + i) % 55) + 5}m ago`,
+    status: { label: ["Ready", "Resting", "Queued", "Plated"][i % 4], tone: ["positive", "warning", "neutral", "info"][i % 4] },
+    value: `m${seed}-${i}`,
+  }))
+const listKey = ref(0)
+const replayEntrances = () => { listKey.value++ }
 
 const bigOutput = {
   query: "spatial-index rebuild",
@@ -151,6 +171,36 @@ const bigOutput = {
           :default-open="false"
           :animate-in="false"
         />
+      </div>
+    </Variant>
+
+    <!-- the production shape: heavy collapsed tool calls with animated item lists
+         interleaved. "replay entrances" remounts the lists so their staggered
+         entrance runs again on top of all the tool call weight -->
+    <Variant title="Stress (mixed transcript)">
+      <div style="max-width: 640px; display: flex; flex-direction: column; gap: 8px;">
+        <Button variant="outline" size="sm" style="align-self: flex-start; margin-bottom: 4px;" @click="replayEntrances">
+          Replay list entrances
+        </Button>
+        <template v-for="(c, i) in manyCalls" :key="i">
+          <ToolCall
+            :name="c.name"
+            icon="lucide:chef-hat"
+            :input="c.input"
+            :output="c.output"
+            :duration-ms="c.durationMs"
+            :default-open="false"
+            :animate-in="false"
+          />
+          <Card v-if="i % 10 === 9" style="overflow: hidden; margin: 4px 0;">
+            <ItemList
+              :key="`list-${i}-${listKey}`"
+              :items="makeListItems(i)"
+              :actions="[{ name: 'delete', icon: 'lucide:trash-2', label: 'Delete', variant: 'danger', confirm: true }]"
+              compact
+            />
+          </Card>
+        </template>
       </div>
     </Variant>
   </Story>
