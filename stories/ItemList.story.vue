@@ -17,6 +17,18 @@ const compactFiles = ref(makeFiles())
 const popoverFiles = ref(makeFiles())
 const log = ref("")
 
+const COURSES = ["Brioche", "Duck confit", "Consomme", "Shallot tart", "Lemon posset", "Cheese board", "Sourdough", "Pate en croute"]
+const TONES = ["positive", "warning", "neutral", "info"]
+const makeStress = () =>
+  Array.from({ length: 100 }, (_, i) => ({
+    label: `${COURSES[i % COURSES.length]} batch ${Math.floor(i / COURSES.length) + 1}`,
+    icon: "lucide:chef-hat",
+    meta: `${(i % 55) + 5}m ago`,
+    status: { label: ["Ready", "Resting", "Queued", "Plated"][i % 4], tone: TONES[i % 4] },
+    value: `s${i}`,
+  }))
+const stressItems = ref(makeStress())
+
 const DELETE = { name: "delete", icon: "lucide:trash-2", label: "Delete", variant: "danger", confirm: true }
 
 function removeFrom(listRef, value) {
@@ -39,6 +51,7 @@ function reset() {
   multiFiles.value = makeFiles()
   compactFiles.value = makeFiles()
   popoverFiles.value = makeFiles()
+  stressItems.value = makeStress()
   log.value = ""
 }
 </script>
@@ -102,6 +115,17 @@ function reset() {
       <div style="max-width: 560px;">
         <Card style="overflow: hidden;">
           <ItemList :items="compactFiles" :actions="[DELETE]" compact @action="onDelete(compactFiles)" />
+        </Card>
+      </div>
+    </Variant>
+
+    <!-- 100 compact rows with hover delete actions - sweep the mouse across the
+         list; hovers stay smooth because the reveal animates only transform and
+         opacity, and each row contains its own style and paint invalidation -->
+    <Variant title="Stress (100 rows)">
+      <div style="max-width: 640px;">
+        <Card style="overflow: hidden;">
+          <ItemList :items="stressItems" :actions="[DELETE]" compact :animate="false" @action="onDelete(stressItems)" />
         </Card>
       </div>
     </Variant>

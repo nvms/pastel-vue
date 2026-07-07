@@ -32,11 +32,12 @@ const delay = (i) => (props.animate ? `${Math.min(i, 12) * 40}ms` : "0ms")
 const actionsFor = (item) => props.actions.filter((a) => !a.show || a.show(item))
 const hasActions = (item) => actionsFor(item).length > 0 && !item.disabled
 
-// width the reveal opens to, so the absolutely-positioned buttons fade into space
-// that exactly fits them. sm icon buttons are control-h-sm (28px) with a 2px gap
+// width reserved in the trail for the absolutely-positioned buttons, and the
+// distance the metadata block slides. sm icon buttons are control-h-sm (28px)
+// with a 2px gap, plus 14px of breathing room between the metadata and the buttons
 const actionsWidth = (item) => {
   const n = actionsFor(item).length
-  return n ? `${n * 28 + (n - 1) * 2}px` : "0px"
+  return n ? `${n * 28 + (n - 1) * 2 + 14}px` : "0px"
 }
 
 const keyOf = (item, index) => item.value ?? item.label ?? index
@@ -118,19 +119,20 @@ const proceed = () => {
       >{{ item.label }}</button>
 
       <div class="pc-itemlist__trail">
-        <span v-if="item.meta" class="pc-itemlist__meta">{{ item.meta }}</span>
+        <span class="pc-itemlist__info">
+          <span v-if="item.meta" class="pc-itemlist__meta">{{ item.meta }}</span>
 
-        <span
-          v-if="item.status"
-          class="pc-itemlist__status"
-          :class="`pc-itemlist__status--${statusOf(item.status).tone}`"
-        >
-          <span class="pc-itemlist__dot" aria-hidden="true" />
-          {{ statusOf(item.status).label }}
+          <span
+            v-if="item.status"
+            class="pc-itemlist__status"
+            :class="`pc-itemlist__status--${statusOf(item.status).tone}`"
+          >
+            <span class="pc-itemlist__dot" aria-hidden="true" />
+            {{ statusOf(item.status).label }}
+          </span>
         </span>
 
         <template v-if="hasActions(item)">
-          <span class="pc-itemlist__spacer" aria-hidden="true"></span>
           <span class="pc-itemlist__actions">
             <template v-for="action in actionsFor(item)" :key="action.name">
               <ConfirmPopover
@@ -192,6 +194,9 @@ const proceed = () => {
   padding: 13px 16px;
   color: var(--ink);
   transition: background 140ms ease;
+  /* scope hover invalidation and paint to the row - on a page with many lists,
+     uncontained hover transitions make the browser reconsider the whole document */
+  contain: layout style paint;
 }
 .pc-itemlist__row + .pc-itemlist__row { border-top: 1px solid var(--ink-08); }
 .pc-itemlist__row:hover:not(.pc-itemlist__row--disabled) { background: var(--ink-04); }
@@ -228,10 +233,25 @@ const proceed = () => {
 .pc-itemlist__label:disabled { color: var(--ink-40); cursor: not-allowed; }
 .pc-itemlist--compact .pc-itemlist__label { font-size: 13px; }
 
-/* trailing zone stays right-aligned; on hover an empty spacer widens (easing the
-   metadata left) while the buttons fade in over it - the buttons are absolutely
-   positioned so they are never clipped, so the open and the fade run together smoothly */
-.pc-itemlist__trail { position: relative; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+/* trailing zone: room for the action buttons is reserved with static padding and
+   the metadata block starts translated into it, flush right. on hover the block
+   slides left (transform) while the buttons fade in (opacity) - no property that
+   triggers layout ever animates, so a hover stays cheap no matter how much else
+   is on the page */
+.pc-itemlist__trail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-right: var(--actions-w, 0px);
+}
+.pc-itemlist__info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transform: translateX(var(--actions-w, 0px));
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
 
 .pc-itemlist__meta {
   font-family: var(--mono);
@@ -263,15 +283,6 @@ const proceed = () => {
 .pc-itemlist__status--negative .pc-itemlist__dot { background: var(--status-failed); }
 .pc-itemlist__status--info .pc-itemlist__dot { background: var(--status-paused); }
 
-/* empty spacer that widens to open room for the buttons; the negative margin
-   cancels the trail gap while collapsed so the metadata sits flush at rest */
-.pc-itemlist__spacer {
-  width: 0;
-  flex-shrink: 0;
-  transition: width 220ms cubic-bezier(0.16, 1, 0.3, 1),
-              margin-left 220ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.pc-itemlist__spacer:not(:first-child) { margin-left: -14px; }
 .pc-itemlist__actions {
   position: absolute;
   right: 0;
@@ -285,11 +296,10 @@ const proceed = () => {
   transition: opacity 200ms ease;
 }
 .pc-itemlist__actions > * { flex-shrink: 0; }
-.pc-itemlist__row:hover:not(.pc-itemlist__row--disabled) .pc-itemlist__spacer,
-.pc-itemlist__row:focus-within .pc-itemlist__spacer,
-.pc-itemlist__row--actions-open .pc-itemlist__spacer {
-  width: var(--actions-w, 0px);
-  margin-left: 0;
+.pc-itemlist__row:hover:not(.pc-itemlist__row--disabled) .pc-itemlist__info,
+.pc-itemlist__row:focus-within .pc-itemlist__info,
+.pc-itemlist__row--actions-open .pc-itemlist__info {
+  transform: translateX(0);
 }
 .pc-itemlist__row:hover:not(.pc-itemlist__row--disabled) .pc-itemlist__actions,
 .pc-itemlist__row:focus-within .pc-itemlist__actions,
@@ -311,7 +321,7 @@ const proceed = () => {
 
 @media (prefers-reduced-motion: reduce) {
   .pc-itemlist--animate .pc-itemlist__row { animation: none; }
-  .pc-itemlist__spacer { transition: none; }
+  .pc-itemlist__info { transition: none; }
   .pc-itemlist__actions { transition: opacity 120ms ease; }
 }
 </style>
