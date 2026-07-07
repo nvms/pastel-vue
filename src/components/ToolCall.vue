@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, inject } from "vue"
+import { ref, computed, inject, watch, onUnmounted } from "vue"
 import { Icon } from "@iconify/vue"
 import Spinner from "./Spinner.vue"
 import { tokenizeCode } from "../syntax.js"
@@ -35,6 +35,19 @@ const toggle = () => {
   // called synchronously so the pin releases before the expand resize can re-pin
   if (open.value && scroller) scroller.reveal(rootRef.value)
 }
+
+// a collapsed body is not rendered at all - a transcript can hold a hundred of
+// these cards, each with a large highlighted payload, and mounting all of that
+// text behind a zero-height row is what makes such pages slow. the body mounts
+// on expand and unmounts only after the collapse transition has finished
+const bodyRendered = ref(open.value)
+let unmountTimer = null
+watch(open, (v) => {
+  clearTimeout(unmountTimer)
+  if (v) bodyRendered.value = true
+  else unmountTimer = setTimeout(() => { bodyRendered.value = false }, 260)
+})
+onUnmounted(() => clearTimeout(unmountTimer))
 
 const STATUS = {
   success: { label: "Done", cls: "ok", icon: "lucide:check" },
@@ -92,7 +105,7 @@ const fmtDuration = (ms) =>
 
     <div class="pc-tool__bodywrap">
       <div class="pc-tool__body">
-        <div class="pc-tool__inner">
+        <div v-if="bodyRendered" class="pc-tool__inner">
           <section v-if="hasInput" class="pc-tool__section">
             <div class="pc-tool__label">Input</div>
             <pre v-if="isComplex(input)" class="pc-tool__code pc-syntax"><span v-for="(t, i) in tok(fmt(input))" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
@@ -121,6 +134,9 @@ const fmtDuration = (ms) =>
   background: var(--paper);
   overflow: hidden;
   transition: transform 60ms ease;
+  /* scope style and paint invalidation to the card - transcripts render many of
+     these and hover or scroll work on one card must not involve the rest */
+  contain: layout style paint;
 }
 
 /* whole-card press feedback when the header is pressed, matching Button's

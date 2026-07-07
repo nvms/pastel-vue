@@ -1,6 +1,32 @@
 <script setup>
 import ToolCall from "../src/components/ToolCall.vue"
 
+// 100 collapsed calls, each carrying a large JSON payload - a transcript from an
+// agent that has been running for a while. collapsed cards must stay cheap no
+// matter how much text they hold
+const STATIONS = ["grill", "pastry", "garde-manger", "saucier", "walk-in", "expo"]
+const makeBigPayload = (seed) => ({
+  station: STATIONS[seed % 6],
+  service: seed % 2 ? "dinner" : "lunch",
+  covers: 40 + (seed % 60),
+  courses: Array.from({ length: 40 }, (_, i) => ({
+    id: `course_${seed}_${i}`,
+    name: `${STATIONS[(seed + i) % 6]} course ${i + 1}`,
+    fireAt: `${17 + (i % 5)}:${String((i * 7) % 60).padStart(2, "0")}`,
+    restMinutes: (i % 12) + 2,
+    par: { prepped: (i * 3) % 24, needed: (i * 5) % 30, unit: i % 2 ? "portions" : "trays" },
+    allergens: ["dairy", "gluten", "shellfish", "nuts"].slice(0, (seed + i) % 4),
+    notes: `hold tray ${i + 1} until the eight-tops are seated, then fire in waves of six plates so nothing waits under the lamp longer than four minutes`,
+  })),
+  tookMs: 120 + (seed % 400),
+})
+const manyCalls = Array.from({ length: 100 }, (_, i) => ({
+  name: `kitchen.plan_${STATIONS[i % 6].replace(/-/g, "_")}`,
+  input: { station: STATIONS[i % 6], date: "today", depth: "full" },
+  output: makeBigPayload(i),
+  durationMs: 180 + (i % 900),
+}))
+
 const bigOutput = {
   query: "spatial-index rebuild",
   matches: Array.from({ length: 12 }, (_, i) => ({
@@ -106,6 +132,24 @@ const bigOutput = {
           icon="lucide:clock"
           :collapsible="false"
           :output="{ iso: '2026-06-19T18:30:00Z', tz: 'America/New_York' }"
+        />
+      </div>
+    </Variant>
+
+    <!-- 100 collapsed calls, each holding a large JSON payload. scroll and hover
+         should stay smooth; a collapsed card does not render its body at all -->
+    <Variant title="Stress (100 collapsed, big JSON)">
+      <div style="max-width: 640px; display: flex; flex-direction: column; gap: 8px;">
+        <ToolCall
+          v-for="(c, i) in manyCalls"
+          :key="i"
+          :name="c.name"
+          icon="lucide:chef-hat"
+          :input="c.input"
+          :output="c.output"
+          :duration-ms="c.durationMs"
+          :default-open="false"
+          :animate-in="false"
         />
       </div>
     </Variant>
