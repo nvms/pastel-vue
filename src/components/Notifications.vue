@@ -108,10 +108,17 @@ const variantLabel = (v) => ({
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 360px;
+  width: max-content;
   max-width: 100%;
   pointer-events: none;
 }
+/* each toast hugs its own content, anchored to the position's edge */
+.pc-notifications--top-right .pc-notifications__stack,
+.pc-notifications--bottom-right .pc-notifications__stack { align-items: flex-end; }
+.pc-notifications--top-left .pc-notifications__stack,
+.pc-notifications--bottom-left .pc-notifications__stack { align-items: flex-start; }
+.pc-notifications--top-center .pc-notifications__stack,
+.pc-notifications--bottom-center .pc-notifications__stack { align-items: center; }
 .pc-notifications--top-right    { top: 0; right: 0; }
 .pc-notifications--top-left     { top: 0; left: 0; }
 .pc-notifications--bottom-right { bottom: 0; right: 0; align-items: flex-end; }
@@ -139,7 +146,10 @@ const variantLabel = (v) => ({
   box-shadow: var(--shadow-medium);
   font-family: var(--display);
   color: var(--ink);
-  min-width: 280px;
+  /* 360px baseline, grows for long unbreakable content up to a cap,
+     both clamped so a small viewport never overflows */
+  min-width: min(360px, calc(100vw - 40px));
+  max-width: min(560px, calc(100vw - 40px));
   overflow: hidden;
 }
 
@@ -172,12 +182,14 @@ const variantLabel = (v) => ({
   letter-spacing: -0.2px;
   line-height: 1.3;
   color: var(--ink);
+  overflow-wrap: anywhere;
 }
 .pc-toast__desc {
   font-size: 13px;
   color: var(--ink-60);
   line-height: 1.45;
   letter-spacing: -0.13px;
+  overflow-wrap: anywhere;
 }
 .pc-toast__action {
   align-self: flex-start;

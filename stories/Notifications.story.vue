@@ -23,6 +23,11 @@ const fireSticky = () => toast({
   duration: 0,
 })
 
+const fireLongWord = () => toast.success(
+  "template_braised_short_rib_glaze_reduction_mapping approved",
+  { description: "The mapping is live for the fall tasting menu." },
+)
+
 const fireAll = () => {
   fireSuccess()
   fireInfo()
@@ -56,6 +61,7 @@ const fireAll = () => {
         <Button variant="outline" @click="fireError">Error (sticky)</Button>
         <Button variant="outline" @click="fireWithAction">With action</Button>
         <Button variant="subtle" @click="fireSticky">Sticky neutral</Button>
+        <Button variant="outline" @click="fireLongWord">Long identifier</Button>
       </div>
       <Notifications position="bottom-right" />
     </Variant>
