@@ -1,6 +1,6 @@
 {
   "name": "pastel-vue",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A pastel-toned Vue 3 component library for building calm, modern interfaces and AI-focused tooling.",
   "type": "module",
   "license": "MIT",
