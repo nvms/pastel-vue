@@ -15,20 +15,30 @@ const props = defineProps({
   durationMs: { type: Number, default: null },
   // iconify name; falls back to a wrench
   icon: { type: String, default: "lucide:wrench" },
+  // slim renders a single tight status line with no body at all - for
+  // transcripts where the payloads are huge or simply not worth showing
+  variant: { type: String, default: "full" }, // full | slim
   collapsible: { type: Boolean, default: true },
   defaultOpen: { type: Boolean, default: true },
   // rise-and-fade in when first mounted (matches ChatMessage); self-contained,
   // so it works anywhere this component is rendered
   animateIn: { type: Boolean, default: true },
+  // cap on characters rendered per input/output section. highlighting is per
+  // character, so an uncapped multi-megabyte payload would lock the tab on
+  // expand. the full value is never rendered - a note says what was clipped
+  maxChars: { type: Number, default: 50000 },
 })
 
 const rootRef = ref(null)
 // optional - present when rendered inside a ChatScroller
 const scroller = inject("pcChatScroller", null)
 
-const open = ref(props.defaultOpen)
+const slim = computed(() => props.variant === "slim")
+const canCollapse = computed(() => props.collapsible && !slim.value)
+
+const open = ref(props.defaultOpen && props.variant !== "slim")
 const toggle = () => {
-  if (!props.collapsible) return
+  if (!canCollapse.value) return
   open.value = !open.value
   // when expanding inside a chat scroller, reveal this card instead of letting
   // the auto-pin keep the user at the bottom with the body off-screen above.
@@ -72,18 +82,35 @@ const hasInput = computed(() => {
 })
 const hasOutput = computed(() => props.output !== undefined && props.output !== null)
 
+// pre-shaped, clipped render model per section. computed so the stringify and
+// highlight run once per value, and only when the body is actually rendered
+const makeSection = (v) => {
+  if (isComplex(v)) {
+    const s = fmt(v)
+    const clipped = s.length > props.maxChars
+    return { kind: "code", tokens: tok(clipped ? s.slice(0, props.maxChars) : s), total: s.length, clipped }
+  }
+  if (typeof v === "string") {
+    const clipped = v.length > props.maxChars
+    return { kind: "text", text: clipped ? v.slice(0, props.maxChars) : v, total: v.length, clipped }
+  }
+  return { kind: "inline", tokens: jsonTokens(v), clipped: false }
+}
+const inputSection = computed(() => (hasInput.value ? makeSection(props.input) : null))
+const outputSection = computed(() => (hasOutput.value ? makeSection(props.output) : null))
+
 const fmtDuration = (ms) =>
   ms == null ? "" : ms >= 1000 ? `${(ms / 1000).toFixed(ms >= 10000 ? 0 : 1)}s` : `${Math.round(ms)}ms`
 </script>
 
 <template>
-  <div ref="rootRef" class="pc-tool" :class="[`pc-tool--${statusMeta.cls}`, { 'pc-tool--open': open, 'pc-tool--animate': animateIn }]">
+  <div ref="rootRef" class="pc-tool" :class="[`pc-tool--${statusMeta.cls}`, { 'pc-tool--open': open, 'pc-tool--animate': animateIn, 'pc-tool--slim': slim }]">
     <component
-      :is="collapsible ? 'button' : 'div'"
-      :type="collapsible ? 'button' : undefined"
+      :is="canCollapse ? 'button' : 'div'"
+      :type="canCollapse ? 'button' : undefined"
       class="pc-tool__head"
-      :class="{ 'pc-tool__head--btn': collapsible }"
-      :aria-expanded="collapsible ? open : undefined"
+      :class="{ 'pc-tool__head--btn': canCollapse }"
+      :aria-expanded="canCollapse ? open : undefined"
       @click="toggle"
     >
       <span class="pc-tool__icon">
@@ -97,27 +124,33 @@ const fmtDuration = (ms) =>
       </span>
       <span v-if="durationMs != null" class="pc-tool__dur">{{ fmtDuration(durationMs) }}</span>
       <Icon
-        v-if="collapsible"
+        v-if="canCollapse"
         icon="lucide:chevron-down"
         class="pc-tool__chev"
       />
     </component>
 
-    <div class="pc-tool__bodywrap">
+    <div v-if="!slim" class="pc-tool__bodywrap">
       <div class="pc-tool__body">
         <div v-if="bodyRendered" class="pc-tool__inner">
-          <section v-if="hasInput" class="pc-tool__section">
+          <section v-if="inputSection" class="pc-tool__section">
             <div class="pc-tool__label">Input</div>
-            <pre v-if="isComplex(input)" class="pc-tool__code pc-syntax"><span v-for="(t, i) in tok(fmt(input))" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
-            <div v-else-if="typeof input === 'string'" class="pc-tool__text">{{ input }}</div>
-            <span v-else class="pc-tool__arg-val pc-syntax"><span v-for="(t, i) in jsonTokens(input)" :key="i" :class="['token', t.type]">{{ t.text }}</span></span>
+            <pre v-if="inputSection.kind === 'code'" class="pc-tool__code pc-syntax"><span v-for="(t, i) in inputSection.tokens" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
+            <div v-else-if="inputSection.kind === 'text'" class="pc-tool__text">{{ inputSection.text }}</div>
+            <span v-else class="pc-tool__arg-val pc-syntax"><span v-for="(t, i) in inputSection.tokens" :key="i" :class="['token', t.type]">{{ t.text }}</span></span>
+            <div v-if="inputSection.clipped" class="pc-tool__clipnote">
+              Showing the first {{ maxChars.toLocaleString() }} of {{ inputSection.total.toLocaleString() }} characters
+            </div>
           </section>
 
-          <section v-if="hasOutput" class="pc-tool__section">
+          <section v-if="outputSection" class="pc-tool__section">
             <div class="pc-tool__label">Output</div>
-            <pre v-if="isComplex(output)" class="pc-tool__code pc-syntax"><span v-for="(t, i) in tok(fmt(output))" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
-            <div v-else-if="typeof output === 'string'" class="pc-tool__text">{{ output }}</div>
-            <span v-else class="pc-tool__arg-val pc-syntax"><span v-for="(t, i) in jsonTokens(output)" :key="i" :class="['token', t.type]">{{ t.text }}</span></span>
+            <pre v-if="outputSection.kind === 'code'" class="pc-tool__code pc-syntax"><span v-for="(t, i) in outputSection.tokens" :key="i" :class="['token', t.type]">{{ t.text }}</span></pre>
+            <div v-else-if="outputSection.kind === 'text'" class="pc-tool__text">{{ outputSection.text }}</div>
+            <span v-else class="pc-tool__arg-val pc-syntax"><span v-for="(t, i) in outputSection.tokens" :key="i" :class="['token', t.type]">{{ t.text }}</span></span>
+            <div v-if="outputSection.clipped" class="pc-tool__clipnote">
+              Showing the first {{ maxChars.toLocaleString() }} of {{ outputSection.total.toLocaleString() }} characters
+            </div>
           </section>
 
           <slot />
@@ -285,6 +318,12 @@ const fmtDuration = (ms) =>
 .pc-tool__code::-webkit-scrollbar { width: 8px; height: 8px; }
 .pc-tool__code::-webkit-scrollbar-thumb { background: var(--ink-20); border-radius: 4px; }
 
+.pc-tool__clipnote {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-40);
+}
+
 /* free-text (prose) output wraps and stays unhighlighted */
 .pc-tool__text {
   font-size: 12.5px;
@@ -293,6 +332,14 @@ const fmtDuration = (ms) =>
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+/* slim: a single tight status line - no body, no chevron, nothing to expand */
+.pc-tool--slim .pc-tool__head { padding: 4px 8px; gap: 7px; }
+.pc-tool--slim .pc-tool__icon { width: 18px; height: 18px; font-size: 11px; border-radius: 5px; }
+.pc-tool--slim .pc-tool__name { font-size: 12px; }
+.pc-tool--slim .pc-tool__status { font-size: 10px; padding: 1px 7px; margin-left: auto; }
+.pc-tool--slim .pc-tool__status-icon { font-size: 11px; }
+.pc-tool--slim .pc-tool__dur { font-size: 10px; }
 
 @media (prefers-reduced-motion: reduce) {
   .pc-tool__bodywrap, .pc-tool__chev { transition: none; }

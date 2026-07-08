@@ -77,6 +77,14 @@ const MIXED_SOURCE = `<template v-for="(c, i) in manyCalls" :key="i">
   </Card>
 </template>`
 
+// a payload in the millions of characters - the full variant clips what it
+// renders and says so, the slim variant never renders it at all
+const hugeOutput = markRaw({
+  transcript: Array.from({ length: 4000 }, (_, i) =>
+    `${STATIONS[i % 6]} station check ${i}: par levels reviewed, walk-in temperature logged at ${2 + (i % 3)}C, mise verified against the prep sheet, and tray rotation confirmed for the evening service window`,
+  ),
+})
+
 const bigOutput = {
   query: "spatial-index rebuild",
   matches: Array.from({ length: 12 }, (_, i) => ({
@@ -171,6 +179,32 @@ const bigOutput = {
           :input="{ terminal: 'front-2' }"
           :output="{ code: 'ETIMEDOUT', message: 'Terminal did not respond within 5000ms', retryable: true }"
           :duration-ms="5000"
+        />
+      </div>
+    </Variant>
+
+    <!-- slim: one tight line per call, no body ever - for transcripts where the
+         payloads are enormous or not worth showing -->
+    <Variant title="Slim">
+      <div style="max-width: 480px; display: flex; flex-direction: column; gap: 6px;">
+        <ToolCall variant="slim" name="inventory.scan" icon="lucide:boxes" :duration-ms="240" :output="hugeOutput" />
+        <ToolCall variant="slim" name="reservations.count" icon="lucide:calendar-check" :duration-ms="82" />
+        <ToolCall variant="slim" name="menu.publish_recipe" icon="lucide:chef-hat" status="running" />
+        <ToolCall variant="slim" name="pos.sync" icon="lucide:credit-card" status="error" :duration-ms="5000" />
+        <ToolCall variant="slim" name="pantry.discard_expired" icon="lucide:trash-2" status="pending" />
+      </div>
+    </Variant>
+
+    <!-- a multi-megabyte output: the body clips at maxChars and says what it cut -->
+    <Variant title="Huge output (truncated)">
+      <div style="max-width: 600px;">
+        <ToolCall
+          name="kitchen.audit_full"
+          icon="lucide:clipboard-list"
+          :input="{ scope: 'all stations', depth: 'exhaustive' }"
+          :output="hugeOutput"
+          :duration-ms="8200"
+          :default-open="false"
         />
       </div>
     </Variant>
