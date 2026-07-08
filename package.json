@@ -33,7 +33,9 @@
   ],
   "sideEffects": [
     "*.css",
-    "*.vue"
+    "*.vue",
+    "src/icons.js",
+    "stories/icons.js"
   ],
   "engines": {
     "node": ">=20"
@@ -44,7 +46,8 @@
     "preview": "histoire preview",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
-    "story:preview": "histoire preview"
+    "story:preview": "histoire preview",
+    "gen:icons": "node scripts/gen-icons.mjs"
   },
   "peerDependencies": {
     "vue": "^3.4"
@@ -61,6 +64,8 @@
   },
   "devDependencies": {
     "@histoire/plugin-vue": "^0.17.17",
+    "@iconify-json/lucide": "^1.2.116",
+    "@iconify/utils": "^3.1.4",
     "@vitejs/plugin-vue": "^5.2.1",
     "histoire": "^0.17.17",
     "vite": "^5.4.0",

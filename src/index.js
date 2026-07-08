@@ -1,3 +1,7 @@
+// registers the icon data the components use, so they render offline without
+// hitting the iconify API at runtime
+import "./icons.js"
+
 // primitives
 export { default as Button } from "./components/Button.vue"
 export { default as Badge } from "./components/Badge.vue"
