@@ -41,7 +41,9 @@
     "node": ">=20"
   },
   "scripts": {
+    "predev": "node scripts/gen-icons.mjs",
     "dev": "histoire dev",
+    "prebuild": "node scripts/gen-icons.mjs",
     "build": "histoire build",
     "preview": "histoire preview",
     "story:dev": "histoire dev",
