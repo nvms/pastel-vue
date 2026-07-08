@@ -333,11 +333,18 @@ const fmtDuration = (ms) =>
   overflow-wrap: anywhere;
 }
 
-/* slim: a single tight status line - no body, no chevron, nothing to expand */
-.pc-tool--slim .pc-tool__head { padding: 4px 8px; gap: 7px; }
+/* slim: a single tight status line - no body, no chevron, nothing to expand.
+   borderless and flush so a run of them reads as plain transcript lines */
+.pc-tool--slim {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.pc-tool--slim .pc-tool__head { padding: 2px 0; gap: 7px; }
 .pc-tool--slim .pc-tool__icon { width: 18px; height: 18px; font-size: 11px; border-radius: 5px; }
-.pc-tool--slim .pc-tool__name { font-size: 12px; }
-.pc-tool--slim .pc-tool__status { font-size: 10px; padding: 1px 7px; margin-left: auto; }
+.pc-tool--slim .pc-tool__name { font-size: 12px; margin-right: auto; }
+/* duration sits left of the status chip so the chips stay flush right */
+.pc-tool--slim .pc-tool__status { font-size: 10px; padding: 1px 7px; order: 1; }
 .pc-tool--slim .pc-tool__status-icon { font-size: 11px; }
 .pc-tool--slim .pc-tool__dur { font-size: 10px; }
 
