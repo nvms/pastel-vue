@@ -47,6 +47,36 @@ const makeListItems = (seed) =>
 const listKey = ref(0)
 const replayEntrances = () => { listKey.value++ }
 
+// hand-written source for the stress variants. without this, histoire generates
+// source by serializing every prop - megabytes of JSON - and then syntax
+// highlights it, which can stall the story view for many seconds
+const STRESS_SOURCE = `<ToolCall
+  v-for="(c, i) in manyCalls"
+  :key="i"
+  :name="c.name"
+  icon="lucide:chef-hat"
+  :input="c.input"
+  :output="c.output"
+  :duration-ms="c.durationMs"
+  :default-open="false"
+  :animate-in="false"
+/>`
+
+const MIXED_SOURCE = `<template v-for="(c, i) in manyCalls" :key="i">
+  <ToolCall
+    :name="c.name"
+    icon="lucide:chef-hat"
+    :input="c.input"
+    :output="c.output"
+    :duration-ms="c.durationMs"
+    :default-open="false"
+    :animate-in="false"
+  />
+  <Card v-if="i % 10 === 9">
+    <ItemList :items="makeListItems(i)" :actions="[deleteAction]" compact />
+  </Card>
+</template>`
+
 const bigOutput = {
   query: "spatial-index rebuild",
   matches: Array.from({ length: 12 }, (_, i) => ({
@@ -158,7 +188,7 @@ const bigOutput = {
 
     <!-- 100 collapsed calls, each holding a large JSON payload. scroll and hover
          should stay smooth; a collapsed card does not render its body at all -->
-    <Variant title="Stress (100 collapsed, big JSON)">
+    <Variant title="Stress (100 collapsed, big JSON)" :source="STRESS_SOURCE">
       <div style="max-width: 640px; display: flex; flex-direction: column; gap: 8px;">
         <ToolCall
           v-for="(c, i) in manyCalls"
@@ -177,7 +207,7 @@ const bigOutput = {
     <!-- the production shape: heavy collapsed tool calls with animated item lists
          interleaved. "replay entrances" remounts the lists so their staggered
          entrance runs again on top of all the tool call weight -->
-    <Variant title="Stress (mixed transcript)">
+    <Variant title="Stress (mixed transcript)" :source="MIXED_SOURCE">
       <div style="max-width: 640px; display: flex; flex-direction: column; gap: 8px;">
         <Button variant="outline" size="sm" style="align-self: flex-start; margin-bottom: 4px;" @click="replayEntrances">
           Replay list entrances
