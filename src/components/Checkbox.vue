@@ -29,6 +29,7 @@ const onChange = (e) => emit("update:modelValue", e.target.checked)
 <style scoped>
 .pc-check {
   display: inline-flex;
+  vertical-align: middle;
   align-items: center;
   gap: 8px;
   cursor: pointer;

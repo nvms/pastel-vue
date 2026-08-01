@@ -37,6 +37,7 @@ const normalize = (o) => (typeof o === "object" && o !== null) ? o : { value: o,
 .pc-radio-group--vertical { flex-direction: column; }
 .pc-radio {
   display: inline-flex;
+  vertical-align: middle;
   align-items: center;
   gap: 8px;
   cursor: pointer;
