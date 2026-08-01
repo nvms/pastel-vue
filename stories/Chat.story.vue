@@ -19,8 +19,10 @@ const items = ref([
 ])
 const draft = ref("")
 const replying = ref(false)
+const workingScroller = ref(null)
 
 function send(value) {
+  workingScroller.value?.scrollToBottom()
   items.value.push({ kind: "msg", role: "user", name: "You", text: value })
   draft.value = ""
   replying.value = true
@@ -295,7 +297,7 @@ function streamReply(idx, full) {
     <!-- everything together: a live, sending chat with a typing indicator -->
     <Variant title="Working chat">
       <div style="display: flex; flex-direction: column; gap: 12px; max-width: 560px; height: 460px;">
-        <ChatScroller style="flex: 1;">
+        <ChatScroller ref="workingScroller" style="flex: 1;">
           <template v-for="(it, i) in items" :key="i">
             <ChatMessage v-if="it.kind === 'msg'" :role="it.role" :name="it.name" :show-name="false" :show-avatar="false" :text="it.text" :streaming="it.streaming" />
             <ToolCall

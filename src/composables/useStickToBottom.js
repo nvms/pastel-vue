@@ -31,6 +31,7 @@ export function useStickToBottom(scrollRef, contentRef, options = {}) {
 
   let lastTop = 0
   let touchY = 0
+  let scrollingToBottom = false
   let ro = null
 
   const el = () => scrollRef.value
@@ -55,8 +56,10 @@ export function useStickToBottom(scrollRef, contentRef, options = {}) {
     const e = el()
     if (!e) return
     const mode = behavior ?? (reduced() ? "auto" : "smooth")
-    e.scrollTo({ top: e.scrollHeight, behavior: mode })
     pinned.value = true
+    isAtBottom.value = true
+    scrollingToBottom = true
+    e.scrollTo({ top: e.scrollHeight, behavior: mode })
   }
 
   const onScroll = () => {
@@ -67,9 +70,11 @@ export function useStickToBottom(scrollRef, contentRef, options = {}) {
     const movingUp = top < lastTop - 1
     lastTop = top
 
-    // follow intent: any upward move or drifting past the threshold releases;
-    // re-engages only on returning to the very bottom
-    if (movingUp || dist > threshold) {
+    // smooth scrolling can emit a brief upward correction when content grows.
+    // keep explicit jumps pinned until they reach the latest content
+    if (scrollingToBottom) {
+      if (dist <= engage) scrollingToBottom = false
+    } else if (movingUp || dist > threshold) {
       pinned.value = false
     } else if (dist <= engage) {
       pinned.value = true
@@ -80,12 +85,20 @@ export function useStickToBottom(scrollRef, contentRef, options = {}) {
     if (dist <= threshold) isAtBottom.value = true
     else if (dist > threshold + band) isAtBottom.value = false
   }
-  const onWheel = (ev) => { if (ev.deltaY < 0) pinned.value = false }
+  const onWheel = (ev) => {
+    if (ev.deltaY < 0) {
+      scrollingToBottom = false
+      pinned.value = false
+    }
+  }
   const onTouchStart = (ev) => { touchY = ev.touches[0]?.clientY ?? 0 }
   const onTouchMove = (ev) => {
     const y = ev.touches[0]?.clientY ?? 0
     // finger dragging down scrolls the content up
-    if (y > touchY + 2) pinned.value = false
+    if (y > touchY + 2) {
+      scrollingToBottom = false
+      pinned.value = false
+    }
     touchY = y
   }
 

@@ -27,6 +27,7 @@ const items = ref(
 )
 
 const draft = ref("")
+const scroller = ref(null)
 let n = 0
 
 // stream a long assistant message in, to test pinning during active streaming
@@ -51,6 +52,7 @@ function addBurst() {
 }
 
 function send(value) {
+  scroller.value?.scrollToBottom()
   items.value.push({ kind: "msg", role: "user", name: "You", text: value })
   draft.value = ""
 }
@@ -67,7 +69,7 @@ function send(value) {
         </div>
 
         <div style="height: 380px; border: 1px solid var(--ink-08); border-radius: 10px; padding: 14px;">
-          <ChatScroller>
+          <ChatScroller ref="scroller">
             <template v-for="(it, i) in items" :key="i">
               <ChatMessage
                 v-if="it.kind === 'msg'"
@@ -90,7 +92,7 @@ function send(value) {
         <ChatComposer v-model="draft" placeholder="Message Sous…" @submit="send" />
         <p style="font-size: 13px; color: var(--ink-60); margin: 0;">
           Start a stream, then scroll up - it stops following and a jump button appears. Scroll
-          back to the bottom and it re-pins. Expanding the tool call while pinned keeps you pinned.
+          back to the bottom and it re-pins. Sending your own message always returns to the latest content.
         </p>
       </div>
     </Variant>
