@@ -53,7 +53,36 @@ const sectionsIcons = [
   },
 ]
 
-const frame = "width: 280px; height: 540px; border: 1px solid var(--ink-08); border-radius: 8px; overflow: hidden;"
+const sectionsNested = [
+  {
+    title: "Operate",
+    items: [
+      { key: "inbox", label: "Inbox", icon: "inbox", badge: 4 },
+      { key: "overview", label: "Overview", icon: "overview" },
+      {
+        key: "kitchens",
+        label: "Kitchens",
+        icon: "kitchens",
+        children: [
+          { key: "stations", label: "Stations", icon: "stations" },
+          { key: "inventory", label: "Walk-in inventory", icon: "inventory" },
+          { key: "schedules", label: "Prep schedules by station and shift", icon: "schedules" },
+        ],
+      },
+      { key: "recipes", label: "Recipes", icon: "recipes" },
+    ],
+  },
+  {
+    title: "Configure",
+    items: [
+      { key: "venues", label: "Venues", icon: "venues" },
+      { key: "workflows", label: "Workflows", icon: "workflows" },
+    ],
+  },
+]
+const e = ref("overview")
+
+const frame = "display: inline-flex; min-width: 280px; height: 540px; border: 1px solid var(--ink-08); border-radius: 8px; overflow: hidden;"
 </script>
 
 <template>
@@ -73,6 +102,16 @@ const frame = "width: 280px; height: 540px; border: 1px solid var(--ink-08); bor
     <Variant title="With icons">
       <div :style="frame">
         <SideNav :sections="sectionsIcons" :active-key="c" @select="c = $event.key">
+          <template #icon="{ item }">
+            <NavIcon :name="item.icon" />
+          </template>
+        </SideNav>
+      </div>
+    </Variant>
+
+    <Variant title="With sub-menus">
+      <div :style="frame">
+        <SideNav :sections="sectionsNested" :active-key="e" @select="e = $event.key">
           <template #icon="{ item }">
             <NavIcon :name="item.icon" />
           </template>

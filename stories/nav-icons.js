@@ -52,6 +52,30 @@ const sets = {
     path("M16 17H8"),
     path("M10 9H8"),
   ],
+  kitchens: () => [
+    path("M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"),
+    line({ x1: 6, x2: 18, y1: 17, y2: 17 }),
+  ],
+  stations: () => [
+    rect({ width: 18, height: 18, x: 3, y: 3, rx: 2 }),
+    path("M3 9h18"),
+    path("M9 21V9"),
+  ],
+  inventory: () => [
+    path("m7.5 4.27 9 5.15"),
+    path("M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"),
+    path("m3.3 7 8.7 5 8.7-5"),
+    path("M12 22V12"),
+  ],
+  schedules: () => [
+    rect({ width: 18, height: 18, x: 3, y: 4, rx: 2 }),
+    line({ x1: 16, x2: 16, y1: 2, y2: 6 }),
+    line({ x1: 8, x2: 8, y1: 2, y2: 6 }),
+    line({ x1: 3, x2: 21, y1: 10, y2: 10 }),
+    path("M8 14h.01"),
+    path("M12 14h.01"),
+    path("M16 14h.01"),
+  ],
   evaluations: () => [
     rect({ width: 8, height: 4, x: 8, y: 2, rx: 1 }),
     path("M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"),

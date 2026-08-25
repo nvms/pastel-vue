@@ -6,7 +6,7 @@ defineProps({
 
 <template>
   <div class="pc-layout">
-    <aside class="pc-layout__nav" :style="{ width: navWidth }"><slot name="nav" /></aside>
+    <aside class="pc-layout__nav" :style="{ minWidth: navWidth }"><slot name="nav" /></aside>
     <div class="pc-layout__main">
       <header v-if="$slots.header" class="pc-layout__header"><slot name="header" /></header>
       <main class="pc-layout__content pc-scroll"><slot /></main>
