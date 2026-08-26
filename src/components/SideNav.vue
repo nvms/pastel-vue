@@ -186,7 +186,7 @@ const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}
                         :class="['pc-sidenav__link', 'pc-sidenav__link--child', { 'pc-sidenav__link--active': isActive(child) }]"
                         @click="emit('select', child)"
                       >
-                        <span class="pc-sidenav__gutter pc-sidenav__rail" aria-hidden="true" />
+                        <span class="pc-sidenav__gutter" aria-hidden="true" />
                         <slot name="icon" :item="child">
                           <span v-if="child.icon" class="pc-sidenav__icon">{{ child.icon }}</span>
                         </slot>
@@ -354,19 +354,6 @@ const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}
 .pc-sidenav__link--parent-active .pc-sidenav__caret { color: var(--ink); }
 .pc-sidenav__caret--open { rotate: 90deg; }
 .pc-sidenav__link--parent-active .pc-sidenav__icon { opacity: 1; }
-
-.pc-sidenav__rail { position: relative; }
-.pc-sidenav__rail::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -2px;
-  bottom: -2px;
-  width: 1px;
-  background: var(--ink-08);
-}
-.pc-sidenav__child:last-child .pc-sidenav__rail::before { bottom: 50%; }
-.pc-sidenav__link--active .pc-sidenav__rail::before { background: var(--paper-on-dark); opacity: 0.35; }
 
 .pc-sidenav__children { overflow: hidden; }
 .pc-sidenav__items--nested { padding-top: 2px; }
