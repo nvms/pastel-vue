@@ -355,6 +355,9 @@ const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}
 .pc-sidenav__caret--open { rotate: 90deg; }
 .pc-sidenav__link--parent-active .pc-sidenav__icon { opacity: 1; }
 
+/* children step in by one icon column, so their icons sit under the parent's label */
+.pc-sidenav__link--child { padding-left: 38px; }
+
 .pc-sidenav__children { overflow: hidden; }
 .pc-sidenav__items--nested { padding-top: 2px; }
 .pc-sidenav__children[data-state="open"] { animation: pc-sidenav-down 220ms cubic-bezier(0.2, 0.8, 0.2, 1); }
