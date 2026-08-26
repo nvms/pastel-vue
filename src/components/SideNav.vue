@@ -336,7 +336,7 @@ const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}
 .pc-sidenav__footer { flex-shrink: 0; border-top: 1px solid var(--ink-08); padding: 12px 10px 0; }
 
 /* groups - every row in a grouped nav reserves the same leading gutter, so item
-   icons share one column whether the row carries a caret, a rail, or nothing */
+   icons share one column whether or not the row carries a caret */
 .pc-sidenav__gutter {
   width: 14px;
   height: 18px;
