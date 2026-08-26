@@ -80,9 +80,25 @@ const measureLink = (link) => {
   return parseFloat(cs.paddingLeft) + inner + gaps + parseFloat(cs.paddingRight)
 }
 
+// the parent's own width (without our min-width) is the floor - a target below it
+// would spend most of the transition invisible, so the shrink would look like a jump.
+// measuring it means briefly lifting the min-width, which is invisible as long as no
+// paint happens in between, so the transition is paused for the read
+const measureFloor = (el) => {
+  const current = getComputedStyle(el).minWidth
+  el.style.transition = "none"
+  el.style.minWidth = ""
+  const floor = el.offsetWidth
+  el.style.minWidth = current
+  void el.offsetWidth
+  el.style.transition = ""
+  return floor
+}
+
 const fit = () => {
   const el = nav.value
   if (!el) return
+  const floor = measureFloor(el)
   const navLeft = el.getBoundingClientRect().left
   const padRight = parseFloat(getComputedStyle(el).paddingRight) || 0
   let need = 0
@@ -91,10 +107,9 @@ const fit = () => {
     const left = link.getBoundingClientRect().left - navLeft
     need = Math.max(need, left + measureLink(link))
   }
-  fitWidth.value = need > 0 ? Math.ceil(need + padRight) : null
+  fitWidth.value = Math.max(Math.ceil(need + padRight), floor)
 }
 
-// reka reveals collapsible content a frame after mount, so measure once it is actually laid out
 const scheduleFit = (delay) => {
   clearTimeout(fitTimer)
   if (delay > 0) { fitTimer = setTimeout(fit, delay); return }
@@ -108,9 +123,13 @@ watch(openKeys, (next, prev) => {
 
 onMounted(() => {
   fit()
-  if (typeof document !== "undefined" && document.fonts?.ready) document.fonts.ready.then(fit)
+  if (document.fonts?.ready) document.fonts.ready.then(fit)
+  window.addEventListener("resize", fit)
 })
-onBeforeUnmount(() => clearTimeout(fitTimer))
+onBeforeUnmount(() => {
+  clearTimeout(fitTimer)
+  window.removeEventListener("resize", fit)
+})
 
 const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}px` } : undefined))
 </script>
@@ -347,19 +366,7 @@ const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}
   background: var(--ink-08);
 }
 .pc-sidenav__child:last-child .pc-sidenav__rail::before { bottom: 50%; }
-.pc-sidenav__child:last-child .pc-sidenav__rail::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 50%;
-  width: 4px;
-  height: 4px;
-  translate: -50% 50%;
-  border-radius: 50%;
-  background: var(--ink-08);
-}
-.pc-sidenav__link--active .pc-sidenav__rail::before,
-.pc-sidenav__link--active .pc-sidenav__rail::after { background: var(--paper-on-dark); opacity: 0.35; }
+.pc-sidenav__link--active .pc-sidenav__rail::before { background: var(--paper-on-dark); opacity: 0.35; }
 
 .pc-sidenav__children { overflow: hidden; }
 .pc-sidenav__items--nested { padding-top: 2px; }
