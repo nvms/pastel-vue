@@ -59,9 +59,13 @@ const reducedMotion = () =>
 const CLOSE_MS = 180
 
 // labels never wrap - instead the nav widens (animated) to whatever its
-// visible rows need, and hands that width to the parent via min-width
+// visible rows need, and hands that width to the parent via min-width.
+// the inline min-width is owned by fit(), not a reactive binding: measuring
+// has to touch it, and a re-fit that lands mid-transition must still end
+// on the target instead of wherever the animation happened to be
 const nav = ref(null)
-const fitWidth = ref(null)
+const sectionsList = ref(null)
+let fitWidth = 0
 let fitTimer = null
 
 // each visible row is asked for its own max-content width inside the same frame the
@@ -82,7 +86,8 @@ const measureRows = (el, navLeft) => {
 // the parent's own width (without our min-width) is the floor - a target below it
 // would spend most of the transition invisible, so the shrink would look like a jump.
 // measuring it means briefly lifting the min-width, which is invisible as long as no
-// paint happens in between, so the transition is paused for the read
+// paint happens in between, so the transition is paused for the read and the
+// animated value is put back so the next write transitions from where it was
 const measureFloor = (el) => {
   const current = getComputedStyle(el).minWidth
   el.style.transition = "none"
@@ -94,14 +99,31 @@ const measureFloor = (el) => {
   return floor
 }
 
-const fit = () => {
+let settling = false
+let settleTimer = null
+
+const fit = ({ instant = false } = {}) => {
   const el = nav.value
   if (!el) return
   const floor = measureFloor(el)
   const navLeft = el.getBoundingClientRect().left
   const padRight = parseFloat(getComputedStyle(el).paddingRight) || 0
-  const need = measureRows(el, navLeft)
-  fitWidth.value = Math.max(Math.ceil(need + padRight), floor)
+  const target = Math.max(Math.ceil(measureRows(el, navLeft) + padRight), floor)
+  if (!target) return
+  const changed = target !== fitWidth
+  fitWidth = target
+  if (instant) el.style.transition = "none"
+  el.style.minWidth = `${target}px`
+  if (instant) {
+    void el.offsetWidth
+    el.style.transition = ""
+    return
+  }
+  if (changed && !reducedMotion()) {
+    settling = true
+    clearTimeout(settleTimer)
+    settleTimer = setTimeout(settled, 400)
+  }
 }
 
 const scheduleFit = (delay) => {
@@ -115,24 +137,45 @@ watch(openKeys, (next, prev) => {
   scheduleFit(closing && !reducedMotion() ? CLOSE_MS : 0)
 })
 
-onMounted(() => {
+// layout changes the nav did not cause (it gets laid out late, fonts land, rows change)
+// re-fit through a ResizeObserver. its own width transition also resizes the content,
+// so observations are ignored while one is running and a single fit runs when it ends
+const settled = () => {
+  clearTimeout(settleTimer)
+  settling = false
   fit()
-  if (document.fonts?.ready) document.fonts.ready.then(fit)
-  window.addEventListener("resize", fit)
+}
+const onTransitionEnd = (e) => {
+  if (e.target === nav.value && e.propertyName === "min-width") settled()
+}
+let observer = null
+
+// a freshly loaded page snaps to its width - only later changes animate
+const refit = () => fit({ instant: !fitWidth })
+
+onMounted(() => {
+  refit()
+  if (document.fonts?.ready) document.fonts.ready.then(refit)
+  window.addEventListener("resize", refit)
+  if (typeof ResizeObserver !== "undefined") {
+    observer = new ResizeObserver(() => { if (!settling) refit() })
+    observer.observe(nav.value)
+    observer.observe(sectionsList.value)
+  }
 })
 onBeforeUnmount(() => {
   clearTimeout(fitTimer)
-  window.removeEventListener("resize", fit)
+  clearTimeout(settleTimer)
+  window.removeEventListener("resize", refit)
+  observer?.disconnect()
 })
-
-const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}px` } : undefined))
 </script>
 
 <template>
   <nav
     ref="nav"
     :class="['pc-sidenav', { 'pc-sidenav--grouped': hasGroups }]"
-    :style="navStyle"
+    @transitionend="onTransitionEnd"
   >
     <header
       v-if="$slots.header"
@@ -140,7 +183,7 @@ const navStyle = computed(() => (fitWidth.value ? { minWidth: `${fitWidth.value}
     ><slot name="header" /></header>
 
     <ScrollArea class="pc-sidenav__sections" height="100%">
-      <div class="pc-sidenav__sections-list">
+      <div ref="sectionsList" class="pc-sidenav__sections-list">
         <div v-for="section in sections" :key="section.title" class="pc-sidenav__section">
           <div v-if="section.title" class="pc-sidenav__section-title">{{ section.title }}</div>
           <ul class="pc-sidenav__items">

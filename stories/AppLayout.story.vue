@@ -10,7 +10,7 @@ import Badge from "../src/components/Badge.vue"
 import Avatar from "../src/components/Avatar.vue"
 import { NavIcon } from "./nav-icons.js"
 
-const active = ref("overview")
+const active = ref("schedules")
 const sections = [
   {
     title: "Operate",

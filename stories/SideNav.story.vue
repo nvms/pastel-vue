@@ -80,7 +80,7 @@ const sectionsNested = [
     ],
   },
 ]
-const e = ref("overview")
+const e = ref("schedules")
 
 const frame = "display: inline-flex; min-width: 280px; height: 540px; border: 1px solid var(--ink-08); border-radius: 8px; overflow: hidden;"
 </script>
