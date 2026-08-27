@@ -64,20 +64,19 @@ const nav = ref(null)
 const fitWidth = ref(null)
 let fitTimer = null
 
-const textWidth = (el) => {
-  const range = document.createRange()
-  range.selectNodeContents(el)
-  return range.getBoundingClientRect().width
-}
-
-const measureLink = (link) => {
-  const cs = getComputedStyle(link)
-  const parts = [...link.children]
-  const inner = parts.reduce((w, el) => (
-    w + (el.classList.contains("pc-sidenav__name") ? textWidth(el) : el.getBoundingClientRect().width)
-  ), 0)
-  const gaps = (parseFloat(cs.columnGap) || 0) * Math.max(parts.length - 1, 0)
-  return parseFloat(cs.paddingLeft) + inner + gaps + parseFloat(cs.paddingRight)
+// each visible row is asked for its own max-content width inside the same frame the
+// floor is read, so the browser does the arithmetic and nothing is painted mid-measure.
+// the row's left comes from its list, not its own rect - the entrance animation
+// translates the row and rects include transforms
+const measureRows = (el, navLeft) => {
+  const links = [...el.querySelectorAll(".pc-sidenav__link")].filter(l => !l.closest('[data-state="closed"]'))
+  for (const link of links) link.style.width = "max-content"
+  const need = links.reduce((w, link) => {
+    const left = link.closest(".pc-sidenav__items").getBoundingClientRect().left - navLeft
+    return Math.max(w, left + link.offsetWidth)
+  }, 0)
+  for (const link of links) link.style.width = ""
+  return need
 }
 
 // the parent's own width (without our min-width) is the floor - a target below it
@@ -101,12 +100,7 @@ const fit = () => {
   const floor = measureFloor(el)
   const navLeft = el.getBoundingClientRect().left
   const padRight = parseFloat(getComputedStyle(el).paddingRight) || 0
-  let need = 0
-  for (const link of el.querySelectorAll(".pc-sidenav__link")) {
-    if (link.closest('[data-state="closed"]')) continue
-    const left = link.getBoundingClientRect().left - navLeft
-    need = Math.max(need, left + measureLink(link))
-  }
+  const need = measureRows(el, navLeft)
   fitWidth.value = Math.max(Math.ceil(need + padRight), floor)
 }
 

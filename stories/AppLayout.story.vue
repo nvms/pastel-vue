@@ -18,6 +18,16 @@ const sections = [
       { key: "inbox", label: "Inbox", icon: "inbox", badge: 4 },
       { key: "overview", label: "Overview", icon: "overview" },
       { key: "intakes", label: "Intake runs", icon: "intakes" },
+      {
+        key: "kitchens",
+        label: "Kitchens",
+        icon: "kitchens",
+        children: [
+          { key: "stations", label: "Stations", icon: "stations" },
+          { key: "inventory", label: "Walk-in inventory", icon: "inventory" },
+          { key: "schedules", label: "Prep schedules by station and shift", icon: "schedules" },
+        ],
+      },
       { key: "recipes", label: "Recipes", icon: "recipes" },
     ],
   },
